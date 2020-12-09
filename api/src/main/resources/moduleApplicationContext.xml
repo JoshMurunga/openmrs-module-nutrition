@@ -14,21 +14,21 @@
     </bean>-->
 
     <!-- Forms config -->
-<!--    <bean id="keaddonexample.config.form" class="org.openmrs.module.kenyacore.form.FormConfiguration">
+    <bean id="keaddonexample.config.form" class="org.openmrs.module.kenyacore.form.FormConfiguration">
         <property name="commonVisitForms">
             <set>
-                <ref bean="keaddonexample.form.example" />
-                <ref bean="keaddonexample.form.socialworkadultscreening" />
+                <ref bean="nutrition.form.nutritionassessment" />
+<!--                <ref bean="keaddonexample.form.socialworkadultscreening" />
                 <ref bean="keaddonexample.form.vmmcClientInitialForm" />
-                <ref bean="keaddonexample.form.vmmcClientFollowupForm" />
+                <ref bean="keaddonexample.form.vmmcClientFollowupForm" />-->
 
 
             </set>
         </property>
-    </bean>-->
+    </bean>
 
     <!-- Forms addition -->
-<!--    <bean id="keaddonexample.form.example" class="org.openmrs.module.kenyacore.form.FormDescriptor">
+    <bean id="nutrition.form.nutritionassessment" class="org.openmrs.module.kenyacore.form.FormDescriptor">
         <property name="targetUuid" value="b694b1bc-2086-47dd-a4ad-ba48f9471e4b" />
         <property name="apps">
             <set>
@@ -37,8 +37,8 @@
             </set>
         </property>
         <property name="icon" value="kenyaui:forms/generic.png" />
-        <property name="htmlform" value="keaddonexample:example.html" />
-    </bean>-->
+        <property name="htmlform" value="nutrition:nutritionassessment.html" />
+    </bean>
 
     <!-- Social work -->
 <!--    <bean id="keaddonexample.form.socialworkadultscreening" class="org.openmrs.module.kenyacore.form.FormDescriptor">

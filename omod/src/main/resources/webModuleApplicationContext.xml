@@ -6,9 +6,9 @@
 
 	<!-- UI Framework setup -->
 
-<!--	<bean class="org.openmrs.ui.framework.StandardModuleUiConfiguration">
-		<property name="moduleId" value="keaddonexample"/>
-	</bean>-->
+	<bean class="org.openmrs.ui.framework.StandardModuleUiConfiguration">
+		<property name="moduleId" value="nutrition"/>
+	</bean>
 
 	
 		

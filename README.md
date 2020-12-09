@@ -1,8 +1,9 @@
-KenyaEMR Example Add-on Module
+KenyaEMR Nutrition Module
 ===============================
 
-This is an example of a add-on module for the KenyaEMR which shows how to add various things to the EMR. For more
-information see:
+This is a nutrition module for the KenyaEMR which allows capturing of Patients'
+nutritional information through the following forms:
 
- * https://wiki.openmrs.org/display/docs/KenyaEMR+Distribution
- * https://wiki.openmrs.org/display/docs/KenyaEMR+Add-on+Module+API
+
+The module also bundles up the following reports:
+1. Patient PHDP and Nutritional Status Report

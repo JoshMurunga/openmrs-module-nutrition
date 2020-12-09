@@ -15,9 +15,9 @@
     </organization>
 
     <scm>
-        <connection>scm:git:git@github.com:I-TECH/openmrs-module-keaddonexample.git</connection>
-        <developerConnection>scm:git:git@github.com:I-TECH/openmrs-module-keaddonexample.git</developerConnection>
-        <url>scm:git:git@github.com:I-TECH/openmrs-module-keaddonexample.git</url>
+        <connection>scm:git:git@github.com:JoshMurunga/openmrs-module-nutrition.git</connection>
+        <developerConnection>scm:git@github.com:JoshMurunga/openmrs-module-nutrition.git</developerConnection>
+        <url>scm:git@github.com:JoshMurunga/openmrs-module-nutrition.git</url>
     </scm>
 
     <modules>
