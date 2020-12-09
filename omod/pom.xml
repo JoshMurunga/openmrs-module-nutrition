@@ -4,14 +4,14 @@
 
 	<parent>
 		<groupId>org.openmrs.module</groupId>
-		<artifactId>keaddonexample</artifactId>
-		<version>1.0-SNAPSHOT</version>
+		<artifactId>nutrition</artifactId>
+		<version>1.0</version>
 	</parent>
 
-	<artifactId>keaddonexample-omod</artifactId>
+	<artifactId>nutrition-omod</artifactId>
 	<packaging>jar</packaging>
-	<name>KenyaEMR Add-on Example Module OMOD</name>
-	<description>OMOD project for KenyaEMR Add-on Example</description>
+	<name>Nutrition OMOD</name>
+	<description>OMOD project for Nutrition</description>
 
 	<dependencies>
 

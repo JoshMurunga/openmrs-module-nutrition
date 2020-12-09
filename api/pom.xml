@@ -4,14 +4,14 @@
 
 	<parent>
 		<groupId>org.openmrs.module</groupId>
-		<artifactId>keaddonexample</artifactId>
-		<version>1.0-SNAPSHOT</version>
+		<artifactId>nutrition</artifactId>
+		<version>1.0</version>
 	</parent>
 
-	<artifactId>keaddonexample-api</artifactId>
+	<artifactId>nutrition-api</artifactId>
 	<packaging>jar</packaging>
-	<name>KenyaEMR Add-on Example Module API</name>
-	<description>API project for KenyaEMR Add-on Example</description>
+	<name>Nutrition API</name>
+	<description>API project for Nutrition</description>
 
 	<dependencies>
 

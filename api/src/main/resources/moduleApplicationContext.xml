@@ -1,124 +1,103 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-	<!-- Apps -->
+    <!-- Apps -->
 
-	<bean id="keaddonexample.app.example" factory-bean="kenyacore.appFactoryBean" factory-method="createInstance">
-		<constructor-arg value="keaddonexample.example" />
-		<constructor-arg value="Example" />
-		<constructor-arg value="keaddonexample/example/home.page" />
-		<constructor-arg value="keaddonexample:apps/example.png" />
-		<constructor-arg value="700" />
-	</bean>
+<!--    <bean id="keaddonexample.app.example" factory-bean="kenyacore.appFactoryBean" factory-method="createInstance">
+        <constructor-arg value="keaddonexample.example" />
+        <constructor-arg value="Example" />
+        <constructor-arg value="keaddonexample/example/home.page" />
+        <constructor-arg value="keaddonexample:apps/example.png" />
+        <constructor-arg value="700" />
+    </bean>-->
 
-		<!-- Forms config -->
-	<bean id="keaddonexample.config.form" class="org.openmrs.module.kenyacore.form.FormConfiguration">
-		<property name="commonVisitForms">
-			<set>
-				<ref bean="keaddonexample.form.example" />
-				<ref bean="keaddonexample.form.socialworkadultscreening" />
-				<ref bean="keaddonexample.form.vmmcClientInitialForm" />
-				<ref bean="keaddonexample.form.vmmcClientFollowupForm" />
+    <!-- Forms config -->
+<!--    <bean id="keaddonexample.config.form" class="org.openmrs.module.kenyacore.form.FormConfiguration">
+        <property name="commonVisitForms">
+            <set>
+                <ref bean="keaddonexample.form.example" />
+                <ref bean="keaddonexample.form.socialworkadultscreening" />
+                <ref bean="keaddonexample.form.vmmcClientInitialForm" />
+                <ref bean="keaddonexample.form.vmmcClientFollowupForm" />
 
 
-			</set>
-		</property>
-	</bean>
+            </set>
+        </property>
+    </bean>-->
 
-	<!-- Forms addition -->
-	<bean id="keaddonexample.form.example" class="org.openmrs.module.kenyacore.form.FormDescriptor">
-		<property name="targetUuid" value="b694b1bc-2086-47dd-a4ad-ba48f9471e4b" />
-		<property name="apps">
-			<set>
-				<ref bean="kenyaemr.app.clinician" />
-				<ref bean="kenyaemr.app.chart" />
-			</set>
-		</property>
-		<property name="icon" value="kenyaui:forms/generic.png" />
-		<property name="htmlform" value="keaddonexample:example.html" />
-	</bean>
+    <!-- Forms addition -->
+<!--    <bean id="keaddonexample.form.example" class="org.openmrs.module.kenyacore.form.FormDescriptor">
+        <property name="targetUuid" value="b694b1bc-2086-47dd-a4ad-ba48f9471e4b" />
+        <property name="apps">
+            <set>
+                <ref bean="kenyaemr.app.clinician" />
+                <ref bean="kenyaemr.app.chart" />
+            </set>
+        </property>
+        <property name="icon" value="kenyaui:forms/generic.png" />
+        <property name="htmlform" value="keaddonexample:example.html" />
+    </bean>-->
 
-	<!-- Social work -->
-	<bean id="keaddonexample.form.socialworkadultscreening" class="org.openmrs.module.kenyacore.form.FormDescriptor">
-		<property name="targetUuid" value="0640058c-aa3f-47d0-867b-3025f2e5f80d" />
-		<property name="apps">
-			<set>
-				<ref bean="kenyaemr.app.clinician" />
-				<ref bean="kenyaemr.app.chart" />
-			</set>
-		</property>
-		<property name="icon" value="kenyaui:forms/generic.png" />
-		<property name="showIfCalculation" value="org.openmrs.module.keaddonexample.calculation.EligibleForAdultSocialWorkScreeningCalculation" />
-		<property name="htmlform" value="keaddonexample:socialworkadultscreening.html" />
-	</bean>
+    <!-- Social work -->
+<!--    <bean id="keaddonexample.form.socialworkadultscreening" class="org.openmrs.module.kenyacore.form.FormDescriptor">
+        <property name="targetUuid" value="0640058c-aa3f-47d0-867b-3025f2e5f80d" />
+        <property name="apps">
+            <set>
+                <ref bean="kenyaemr.app.clinician" />
+                <ref bean="kenyaemr.app.chart" />
+            </set>
+        </property>
+        <property name="icon" value="kenyaui:forms/generic.png" />
+        <property name="showIfCalculation" value="org.openmrs.module.keaddonexample.calculation.EligibleForAdultSocialWorkScreeningCalculation" />
+        <property name="htmlform" value="keaddonexample:socialworkadultscreening.html" />
+    </bean>-->
 
-	<!-- VMMC Initial -->
-	<bean id="keaddonexample.form.vmmcClientInitialForm" class="org.openmrs.module.kenyacore.form.FormDescriptor">
-		<property name="targetUuid" value="5f91bcbf-edd2-4580-9b9a-85fbfa37ac4e" />
-		<property name="apps">
-			<set>
-				<ref bean="kenyaemr.app.clinician" />
-				<ref bean="kenyaemr.app.chart" />
-			</set>
-		</property>
-		<property name="icon" value="kenyaui:forms/generic.png" />
-		<property name="htmlform" value="keaddonexample:vmmcClientInitialForm.html" />
-	</bean>
+    <!-- VMMC Initial -->
+<!--    <bean id="keaddonexample.form.vmmcClientInitialForm" class="org.openmrs.module.kenyacore.form.FormDescriptor">
+        <property name="targetUuid" value="5f91bcbf-edd2-4580-9b9a-85fbfa37ac4e" />
+        <property name="apps">
+            <set>
+                <ref bean="kenyaemr.app.clinician" />
+                <ref bean="kenyaemr.app.chart" />
+            </set>
+        </property>
+        <property name="icon" value="kenyaui:forms/generic.png" />
+        <property name="htmlform" value="keaddonexample:vmmcClientInitialForm.html" />
+    </bean>-->
 
-	<!-- VMMC Followup -->
-	<bean id="keaddonexample.form.vmmcClientFollowupForm" class="org.openmrs.module.kenyacore.form.FormDescriptor">
-		<property name="targetUuid" value="434d97d1-13c7-4e2f-bae8-ca57eb42f6a0" />
-		<property name="apps">
-			<set>
-				<ref bean="kenyaemr.app.clinician" />
-				<ref bean="kenyaemr.app.chart" />
-			</set>
-		</property>
-		<property name="icon" value="kenyaui:forms/generic.png" />
-		<property name="htmlform" value="keaddonexample:vmmcClientFollowupForm.html" />
-	</bean>
+    <!-- VMMC Followup -->
+<!--    <bean id="keaddonexample.form.vmmcClientFollowupForm" class="org.openmrs.module.kenyacore.form.FormDescriptor">
+        <property name="targetUuid" value="434d97d1-13c7-4e2f-bae8-ca57eb42f6a0" />
+        <property name="apps">
+            <set>
+                <ref bean="kenyaemr.app.clinician" />
+                <ref bean="kenyaemr.app.chart" />
+            </set>
+        </property>
+        <property name="icon" value="kenyaui:forms/generic.png" />
+        <property name="htmlform" value="keaddonexample:vmmcClientFollowupForm.html" />
+    </bean>-->
 
-	<!-- Reports -->
+    <!-- Reports -->
 
-	<bean id="kenyaemr.config.addon.report" class="org.openmrs.module.kenyacore.report.ReportConfiguration">
-		<property name="commonReports">
-			<set>
-				<ref bean="kenyaemr.etl.common.report.patientClinicalVisits"/>
-				<ref bean="kenyaemr.etl.common.report.patientOnART"/>
-				<ref bean="kenyaemr.etl.common.report.hivPatientsVisits"/>
-			</set>
-		</property>
-	</bean>
+    <bean id="kenyaemr.config.addon.report" class="org.openmrs.module.kenyacore.report.ReportConfiguration">
+        <property name="commonReports">
+            <set>
+                <ref bean="kenyaemr.etl.common.report.patientPHDP"/>
+            </set>
+        </property>
+    </bean>
 
-	<bean id="kenyaemr.etl.common.report.patientClinicalVisits" class="org.openmrs.module.kenyacore.report.IndicatorReportDescriptor">
-		<property name="targetUuid" value="598dce12-6714-4ba3-8f70-6050ae45e09e" />
-		<property name="name" value="Patient Clinical Visits Report" />
-		<property name="description" value="A report for Patient Clinical Visits" />
-		<property name="apps">
-			<set>
-				<ref bean="kenyaemr.app.reports" />
-			</set></property>
-	</bean>
-
-	<bean id="kenyaemr.etl.common.report.patientOnART" class="org.openmrs.module.kenyacore.report.HybridReportDescriptor">
-		<property name="targetUuid" value="5ef336f5b-de69-47a2-9d55-71a88a96fb14" />
-		<property name="name" value="Patients On ART Register" />
-		<property name="description" value="A report for Patient On ART" />
-		<property name="apps">
-			<set>
-				<ref bean="kenyaemr.app.reports" />
-			</set></property>
-	</bean>
-
-	<bean id="kenyaemr.etl.common.report.hivPatientsVisits" class="org.openmrs.module.kenyacore.report.HybridReportDescriptor">
-		<property name="targetUuid" value="a2bc88d4-6766-46dd-b3ca-f3fd063d53d1" />
-		<property name="name" value="Patients with HIV Visits" />
-		<property name="description" value="A report for Patients with HIV Visits" />
-		<property name="apps">
-			<set>
-				<ref bean="kenyaemr.app.reports" />
-			</set></property>
-	</bean>
+    <bean id="kenyaemr.etl.common.report.patientPHDP" class="org.openmrs.module.kenyacore.report.HybridReportDescriptor">
+        <property name="targetUuid" value="5ef336f5b-de69-47a2-9d55-71a88a96fb14" />
+        <property name="name" value="Patients PHDP Report" />
+        <property name="description" value="A report for Patients PHDP and Nutitional Status" />
+        <property name="apps">
+            <set>
+                <ref bean="kenyaemr.app.reports" />
+            </set>
+        </property>
+    </bean>
 </beans>

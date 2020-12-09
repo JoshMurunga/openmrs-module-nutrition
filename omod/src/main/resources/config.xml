@@ -4,14 +4,14 @@
 	<name>${project.parent.name}</name>
 	<version>${project.parent.version}</version>
 	<package>${project.parent.groupId}.${project.parent.artifactId}</package>
-	<author>I-TECH</author>
+	<author>Josh Murunga</author>
 	<description>${project.parent.description}</description>
 	<updateURL>https://dev.openmrs.org/modules/download/${project.parent.artifactId}/update.rdf</updateURL>
 	<require_version>${openMRSVersion}</require_version>
 	<require_modules>
 		<require_module version="${kenyaemrVersion}">org.openmrs.module.kenyaemr</require_module>
 	</require_modules>
-	<activator>${project.parent.groupId}.${project.parent.artifactId}.ExampleActivator</activator>
+	<activator>${project.parent.groupId}.${project.parent.artifactId}.NutritionActivator</activator>
 	<messages>
 		<lang>en</lang>
 		<file>messages.properties</file>
