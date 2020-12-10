@@ -1,4 +1,28 @@
 <htmlform>
+    <style type="text/css">
+        .StepTitle {
+            display:block;
+            position:relative;
+            margin:0;
+            border:1px solid #E0E0E0;
+            padding:5px;
+            font:700 16px Verdana,Arial,Helvetica,sans-serif;
+            background-color:#E0E0E0;
+            -webkit-border-radius:5px;
+            -moz-border-radius:5px
+        }
+
+        .StepTitle-2 {
+            display:block;
+            position:relative;
+            margin:0;
+            border:1px solid #E0E0E0;
+            font:700 15px Verdana,Arial,Helvetica,sans-serif;
+            background-color:#E0E0E0;
+            -webkit-border-radius:5px;
+            -moz-border-radius:5px
+        }
+    </style>
 
     <script type="text/javascript">
         // Add javascript here
@@ -8,28 +32,220 @@
         <table width="100%">
             <tr>
                 <td>Date <encounterDate id="encounter-date" /></td>
-                <td>Provider <encounterProvider default="currentUser" /></td>
-                <td>Location <encounterLocation default="GlobalProperty:kenyaemr.defaultLocation" /></td>
+            <td>Provider <encounterProvider default="currentUser" /></td>
+            <td>Location <encounterLocation default="GlobalProperty:kenyaemr.defaultLocation" /></td>
             </tr>
         </table>
     </div>
 
     <div class="ke-form-content">
-        <fieldset>
-            <legend>Goats</legend>
-            <table>
-                <tr>
-                    <td>Total number of goats:</td>
-                    <td><obs conceptId="159683AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" /></td>
-                </tr>
+        <div id="step-1">
+            <h2 class="StepTitle">Assessment</h2>
+            <fieldset>
+                <legend>Section 1</legend>
+                <h3 class="StepTitle-2">Anthropometric assessment</h3>
+                <table cellspacing="15" >                    
+                    <tr>
+                        <th>Recordings</th>
+                        <th align="left">Current</th>
+                        <th align="left">Recent</th>
+                        <th align="left">Nutritional Status</th>
+                    </tr>
+                    <tr class="patient-details">
+                        <td>Weight</td>
+                        <td>
+                            <obs id="weight" conceptId="5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>kg
+                        </td>
+                        <td>
+                            <span class="value">
+                                <recentObs conceptId="5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                            </span>
+                        </td>
+                        <td rowspan="4">
+                            <obs    id="nutritional-status"
+                                    conceptId="163300AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                                    answerConceptIds="1115AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,163302AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,163303AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,114413AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                                    answerLabels="Normal,Severe acute malnutrition,Moderate acute malnutrition,Overweight/Obese"
+                                    style="radio"
+                                    answerSeparator="&lt;br /&gt;"
+                                    />
+                        </td>
+                    </tr>
+                    <tr class="patient-details">
+                        <td>Height</td>
+                        <td>
+                            <obs id="height" conceptId="5090AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>cm
+                        </td>
+                        <td>
+                            <span class="value">
+                                <recentObs conceptId="5090AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                            </span>
+                        </td>
+                    </tr>
+                    <includeIf velocityTest="$patient.age &gt; 14">
+                        <tr class="patient-details">
+                            <td>BMI</td>
+                            <td><span id="calculated-bmi" class="value"></span></td>
+                            <td><span id="recent-calculated-bmi" class="value"></span></td>
+                        </tr>
+                    </includeIf>
+                    <tr class="patient-details">
+                        <td>MUAC</td>
+                        <td>
+                            <obs conceptId="1343AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" id="muac"/>
+                        </td>
+                        <td>
+                            <span class="value">
+                                <recentObs conceptId="1343AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr class="patient-details">
+                        <td>WC</td>
+                        <td>
+                            <obs conceptId="163080AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" id="wc"/>
+                        </td>
+                        <td>
+                            <span class="value">
+                                <recentObs conceptId="163080AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+                <hr />
+                <h3 class="StepTitle-2">Biochemical assessment</h3>
+                <table cellspacing="15">
+                    <tr>
+                        <th>Recordings</th>
+                        <th align="left">Current</th>
+                        <th align="left">Recent</th>
+                    </tr>
+                    <tr>
+                        <td>BP</td>
+                        <td>
+                            <obs conceptId="5085AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" id="systolic"/>/
+                            <obs conceptId="5086AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" id="diastolic"/>mmHg
+                        </td>
+                        <td>
+                            <span class="value">
+                                <recentObs conceptId="5085AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>/
+                                <recentObs conceptId="5086AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Rbs</td>
+                        <td>
+                            <obs conceptId="887AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" id="rbs"/>
+                        </td>
+                        <td>
+                            <span class="value">
+                                <recentObs conceptId="887AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Cholesterol</td>
+                        <td>
+                            <obs conceptId="1006AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" id="cholesterol"/>
+                        </td>
+                        <td>
+                            <span class="value">
+                                <recentObs conceptId="1006AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Triglycerides</td>
+                        <td>
+                            <obs conceptId="1009AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" id="triglycerides"/>
+                        </td>
+                        <td>
+                            <span class="value">
+                                <recentObs conceptId="1009AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Fat %</td>
+                        <td>
+                            <obs conceptId="1009AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" id="fat"/>
+                        </td>
+                        <td>
+                            <span class="value">
+                                <recentObs conceptId="1009AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Anaemia</td>
+                        <td>
+                            <obs conceptId="679AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" id="anaemia"/>
+                        </td>
+                        <td>
+                            <span class="value">
+                                <recentObs conceptId="679AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+                <hr />
+                <h3 class="StepTitle-2">Clinical assessment (not yet complete)</h3>
+                <table cellspacing="15">
+                    <tr>
+                        <th>Recordings</th>
+                        <th align="left">Current</th>
+                        <th align="left">Recent</th>
+                    </tr>
+                    <tr>
+                        <td>Unplanned Weight Loss</td>
+                        <td>
+                            <obs conceptId="679AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" id="anaemia"/>
+                        </td>
+                        <td>
+                            <span class="value">
+                                <recentObs conceptId="679AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>OIs</td>
+                        <td>
+                            <obs conceptId="679AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" id="anaemia"/>
+                        </td>
+                        <td>
+                            <span class="value">
+                                <recentObs conceptId="679AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Malnutrition</td>
+                        <td>
+                            <obs conceptId="679AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" id="anaemia"/>
+                        </td>
+                        <td>
+                            <span class="value">
+                                <recentObs conceptId="679AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+                <hr />
+                <h3 class="StepTitle-2">Dietary assessment (not yet complete)</h3>
+                <table cellspacing="5" style=" float: left;">
+                    <tr></tr>
+                </table>
+                <table cellspacing="5" style="display: inline-block; ">
+                    
+                </table>
+            </fieldset>
 
-                <tr>
-                    <td>Total number of sheep:</td>
-                    <td><obs conceptId="159683AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" /></td>
-                </tr>
-
-            </table>
-        </fieldset>
+            <fieldset>
+                <legend>Section 2</legend>
+                <table></table>
+            </fieldset>
+        </div>
     </div>
 
     <div class="ke-form-footer">
