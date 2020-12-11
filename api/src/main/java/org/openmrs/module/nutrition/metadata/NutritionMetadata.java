@@ -40,6 +40,6 @@ public class NutritionMetadata extends AbstractMetadataBundle {
     public void install() {
 		install(encounterType("Ntutrition", "Nutrition Encounter", _EncounterType.NUTRITION));
 
-		install(form("Nutrition form", null, _EncounterType.NUTRITION, "1", _Form.NUTRITION));
+		install(form("Nutrition Form", null, _EncounterType.NUTRITION, "1", _Form.NUTRITION));
     }
 }
