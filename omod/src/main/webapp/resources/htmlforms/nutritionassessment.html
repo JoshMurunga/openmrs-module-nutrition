@@ -22,6 +22,10 @@
             -webkit-border-radius:5px;
             -moz-border-radius:5px
         }
+        
+        .ke-form-content textarea {
+            width: 90%;
+	}
     </style>
 
     <script type="text/javascript">
@@ -31,22 +35,21 @@
     <div class="ke-form-header">
         <table width="100%">
             <tr>
-                <td>Date <encounterDate id="encounter-date" /></td>
-            <td>Provider <encounterProvider default="currentUser" /></td>
-            <td>Location <encounterLocation default="GlobalProperty:kenyaemr.defaultLocation" /></td>
+                <td>Date <encounterDate id="encounter-date" showTime="true" /></td>
+                <td>Provider <encounterProvider default="currentUser" /></td>
+                <td>Location <encounterLocation default="GlobalProperty:kenyaemr.defaultLocation" /></td>
             </tr>
         </table>
     </div>
 
     <div class="ke-form-content">
         <div id="step-1">
-            <h2 class="StepTitle">Assessment</h2>
-            <fieldset>
-                <legend>Section 1</legend>
-                <h3 class="StepTitle-2">Anthropometric assessment</h3>
-                <table cellspacing="15" >                    
+            <h2 class="StepTitle">ASSESSMENT</h2>
+            <fieldset class="patient-details">
+                <legend>Anthropometric & Biochemical</legend>
+                <table cellspacing="5" style="float: left;">                    
                     <tr>
-                        <th>Recordings</th>
+                        <th>Anthropometric assessment</th>
                         <th align="left">Current</th>
                         <th align="left">Recent</th>
                         <th align="left">Nutritional Status</th>
@@ -112,11 +115,9 @@
                         </td>
                     </tr>
                 </table>
-                <hr />
-                <h3 class="StepTitle-2">Biochemical assessment</h3>
-                <table cellspacing="15">
+                <table cellspacing="5">
                     <tr>
-                        <th>Recordings</th>
+                        <th>Biochemical assessment</th>
                         <th align="left">Current</th>
                         <th align="left">Recent</th>
                     </tr>
@@ -189,11 +190,12 @@
                         </td>
                     </tr>
                 </table>
-                <hr />
-                <h3 class="StepTitle-2">Clinical assessment (not yet complete)</h3>
+            </fieldset>
+            <fieldset class="patient-details">
+                <legend>Clinical</legend>
                 <table cellspacing="15">
                     <tr>
-                        <th>Recordings</th>
+                        <th>Clinical assessment (not yet complete)</th>
                         <th align="left">Current</th>
                         <th align="left">Recent</th>
                     </tr>
@@ -231,8 +233,10 @@
                         </td>
                     </tr>
                 </table>
-                <hr />
-                <table cellspacing="15" style=" float: left;">
+            </fieldset>
+            <fieldset class="patient-details">
+                <legend>Dietary & Food Security</legend>
+                <table cellspacing="5" style=" float: left;">
                     <tr><th>Dietary assessment (not yet complete)</th></tr>
                     <tr>
                         <td><obs conceptId="1198AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerConceptId="782AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerLabel="Breakfast" style="checkbox" /></td>
@@ -256,7 +260,7 @@
                         <td><obs conceptId="1198AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerConceptId="782AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerLabel="8 glasses of water" style="checkbox" /></td>
                     </tr>
                 </table>
-                <table cellspacing="15" style="display: inline-block; ">
+                <table cellspacing="5" style="display: inline-block; ">
                     <tr><th>Household food security assessment (not yet complete)</th></tr>
                     <tr class="patient-details">
                         <td>
@@ -270,10 +274,11 @@
                         </td>
                     </tr>
                 </table>
-                <br/>
-                <hr />
-                <h3 class="StepTitle-2">Physical activity assessment (not yet complete)</h3>
+            </fieldset>
+            <fieldset class="patient-details">
+                <legend>Physical</legend>
                 <table style="display: inline-block;" cellspacing="15">
+                    <tr><th>Physical activity assessment</th></tr>
                     <tr class="patient-details">
                         <td>
                             <obs    id="nutritional-status"
@@ -287,11 +292,95 @@
                     </tr>
                 </table>
             </fieldset>
-
-            <fieldset>
-                <legend>Section 2</legend>
-                <table></table>
+            <fieldset class="patient-details">
+                <legend>NCDs & Risk Factors</legend>
+                <table>
+                    <tr><td>Medical History</td></tr>
+                    <tr><td>Family History of Chronic Diseases</td></tr>
+                    <tr>
+                        <td>Medical History</td>
+                        <td>
+                            Do you smoke? &#160;&#160;
+                            <obs conceptId="164949"
+                                answerConceptIds="1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                                answerLabel="Yes,No"
+                                style="radio"
+                                id="on-ipt" />
+                            <br/>
+                        </td>
+                    </tr>
+                    <tr><td>Quantity</td></tr>
+                    <tr>
+                        <td>
+                            Do you take alcohol? &#160;&#160;
+                            <obs conceptId="164949"
+                                answerConceptIds="1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                                answerLabel="Yes,No"
+                                style="radio"
+                                id="on-ipt" />
+                            <br/>
+                        </td>
+                    </tr>
+                </table>
             </fieldset>
+            <fieldset class="patient-details">
+                <legend>PMTCT</legend>
+                <table>
+                    <tr><td>Blood Group</td></tr>
+                    <tr><td>Viral Load</td></tr>
+                    <tr><td>Micronutrient Supplements</td></tr>
+                    <tr><td>ANC Visits</td></tr>
+                </table>
+            </fieldset>
+            <fieldset class="patient-details">
+                <legend>IYCN</legend>
+                <table>
+                    <tr><td>Birth Weight</td></tr>
+                    <tr><td>Current Weight</td></tr>
+                    <tr><td>Length</td></tr>
+                    <tr><td>Z Scores</td></tr>
+                    <tr><td>Infant Feeding Option</td></tr>
+                    <tr><td>Timely introduction of complementary foods at 6 months</td></tr>
+                </table>
+            </fieldset>
+        </div>
+        <div id="step-2">
+            <h2 class="StepTitle">DIAGNOSIS</h2>
+            <fieldset class="patient-details">
+                <legend>Patient Diagnosis</legend>
+                <table style="width: 70%;" border="0">
+                    <tr>
+                        <th align="left">Diagnosis</th>
+                    </tr>
+                    <repeat>
+                        <template>
+                            <obsgroup groupingConceptId="159947AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA">
+                                <tr>
+                                    <td>
+                                        <obs conceptId="6042AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerClasses="Diagnosis" id="diagnosis-type" style="autocomplete"/>
+                                    </td>
+                                </tr>
+                            </obsgroup>
+                        </template>
+                        <render n="11" concept="Diagnosis"/>
+                        <render n="12" concept="Diagnosis"/>
+                        <render n="13" concept="Diagnosis"/>
+                        <render n="14" concept="Diagnosis"/>
+                        <render n="15" concept="Diagnosis"/>
+                    </repeat>
+                </table>
+            </fieldset>
+        </div>
+        <div id="step-2">
+            <h2 class="StepTitle">NUTRITION INTERVENTIONS</h2>
+            <div class="ke-form-content">
+                <div>
+                    <recentObs conceptId="159395AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                </div>
+		<div style="text-align: center">
+                    <obs conceptId="159395AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" rows="10" style="textarea" />
+		</div>
+            </div>
         </div>
     </div>
 
