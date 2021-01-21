@@ -29,7 +29,64 @@
     </style>
 
     <script type="text/javascript">
-        // Add javascript here
+        function onWeightOrHeightChange() {
+            var display = '';
+            var weightKg = parseFloat(getValue('weight.value'));
+            var heightM = parseFloat(getValue('height.value')) / 100;
+            if (!isNaN(weightKg) &amp;&amp; !isNaN(heightM)) {
+                var bmi = weightKg / (heightM * heightM);
+                if (isNaN(bmi) || bmi &lt; 10 || bmi &gt; 50) {
+                    display = 'Abnormal value. Were height and height entered correctly?';
+                }
+                else {
+                    display = bmi.toFixed(2);
+                }
+            }
+            jQuery('#calculated-bmi').html(display);
+        }
+        
+        function displayRecentBmi() {
+            var weightKg = "<lookup expression="fn.latestObs(5089).valueNumeric"/>"
+            var heightM = ("<lookup expression="fn.latestObs(5090).valueNumeric"/>")/100
+            var bmi = '';
+            var recent_bmi ='';
+            if (!isNaN(weightKg) &amp;&amp; !isNaN(heightM)) {
+                bmi = weightKg / (heightM * heightM);
+                recent_bmi = bmi.toFixed(2);
+                jq('#recent-calculated-bmi').html(recent_bmi);
+            }
+        }
+        
+        function onWaistOrHipChange() {
+            var displayWHR = '';
+            var waist = parseFloat(getValue('wc.value'));
+            var hip = parseFloat(getValue('hc.value'));
+            if (!isNaN(waist) &amp;&amp; !isNaN(hip)) {
+                var whr = waist / hip;
+                displayWHR = bmi.toFixed(2);
+            }
+            jQuery('#calculated-bmi').html(display);
+        }
+        
+        function displayRecentBmi() {
+            var weightKg = "<lookup expression="fn.latestObs(5089).valueNumeric"/>"
+            var heightM = ("<lookup expression="fn.latestObs(5090).valueNumeric"/>")/100
+            var bmi = '';
+            var recent_bmi ='';
+            if (!isNaN(weightKg) &amp;&amp; !isNaN(heightM)) {
+                bmi = weightKg / (heightM * heightM);
+                recent_bmi = bmi.toFixed(2);
+                jq('#recent-calculated-bmi').html(recent_bmi);
+            }
+        }
+
+        jQuery(function () {
+            getField('weight.value').change(onWeightOrHeightChange);
+            getField('height.value').change(onWeightOrHeightChange);
+            onWeightOrHeightChange();
+            displayRecentBmi();
+            
+        });
     </script>
 
     <div class="ke-form-header">
@@ -75,7 +132,7 @@
                             </span>
                         </td>
                     </tr>
-                    <includeIf velocityTest="$patient.age &gt; 14">
+                    <includeIf velocityTest="$patient.age &gt; 17">
                         <tr class="patient-details">
                             <td>BMI</td>
                             <td><span id="calculated-bmi" class="value"></span></td>
@@ -93,14 +150,14 @@
                             </span>
                         </td>
                     </tr>
-                    <includeIf velocityTest="$patient.age &gt; 14">
+                    <includeIf velocityTest="$patient.age &lt; 5">
                         <tr class="patient-details">
                             <td>Z-Score</td>
                             <td><span id="calculated-bmi" class="value"></span></td>
                             <td><span id="recent-calculated-bmi" class="value"></span></td>
                         </tr>
                     </includeIf>
-                    <includeIf velocityTest="$patient.age &gt; 14">
+                    <includeIf velocityTest="$patient.age &lt; 17 &amp;&amp; $patient.age &gt; 5">
                         <tr class="patient-details">
                             <td>BMI for Age</td>
                             <td><span id="calculated-bmi" class="value"></span></td>
@@ -121,7 +178,7 @@
                     <tr class="patient-details">
                         <td>HC</td>
                         <td>
-                            <obs conceptId="163080AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" id="wc"/>
+                            <obs conceptId="163080AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" id="hc"/>
                         </td>
                         <td>
                             <span class="value">
@@ -129,11 +186,11 @@
                             </span>
                         </td>
                     </tr>
-                    <includeIf velocityTest="$patient.age &gt; 14">
+                    <includeIf velocityTest="$patient.age &gt; 17">
                         <tr class="patient-details">
                             <td>Waist Hip Ratio</td>
-                            <td><span id="calculated-bmi" class="value"></span></td>
-                            <td><span id="recent-calculated-bmi" class="value"></span></td>
+                            <td><span id="calculated-whr" class="value"></span></td>
+                            <td><span id="recent-calculated-whr" class="value"></span></td>
                         </tr>
                     </includeIf>
                 </table>
@@ -225,7 +282,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>OIs</td>
+                        <th>OIs</th>
                         <repeat>
                             <template>
                                 <obsgroup groupingConceptId="159947AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA">
@@ -379,22 +436,45 @@
                 <legend>NCDs and Risk Factors</legend>
                 <table>
                     <tr>
-                        <td>Medical History</td>
-                        <obs conceptId="164949"
-                                answerConceptIds="1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-                                answerLabel="Yes,No"
-                                style="radio"
-                                id="on-ipt" />
-                        <br/>
+                        <div>
+                            Medical History? &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                            <obs id="known-allergies" conceptId="160557AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"  style="yes_no"/>
+                            <span style="color:red;"><strong>*</strong></span>
+                        </div>
+                        <tr>
+                            <td>&#160;</td>
+                        </tr>
+                        <table style="width: 70%;" border="0">
+                            <tr>
+                                <th align="left">Diagnosis</th>
+                            </tr>
+                            <repeat>
+                                <template>
+                                    <obsgroup groupingConceptId="159947AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA">
+                                        <tr>
+                                            <td>
+                                                <obs conceptId="6042AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerClasses="Diagnosis" id="diagnosis-type" style="autocomplete"/>
+                                            </td>
+                                        </tr>
+                                    </obsgroup>
+                                </template>
+                                <render n="11" concept="Diagnosis"/>
+                                <render n="12" concept="Diagnosis"/>
+                                <render n="13" concept="Diagnosis"/>
+                                <render n="14" concept="Diagnosis"/>
+                                <render n="15" concept="Diagnosis"/>
+                            </repeat>
+                        </table>
                     </tr>
                     <tr>
-                        <td>Family History of Chronic Diseases</td>
-                        <obs conceptId="164949"
-                                answerConceptIds="1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-                                answerLabel="Yes,No"
-                                style="radio"
-                                id="on-ipt" />
-                        <br/>
+                        <div>
+                            Family history of chronic diseases? &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                            <obs id="known-allergies" conceptId="160557AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"  style="yes_no"/>
+                            <span style="color:red;"><strong>*</strong></span>
+                        </div>
+                        <tr>
+                            <td>&#160;</td>
+                        </tr>
                         <table id="tbl-chronic-illness">
                             <tr>
                                 <th style="color: #888">Illness</th>
@@ -450,7 +530,7 @@
             </fieldset>
             <fieldset class="patient-details">
                 <legend>PMTCT</legend>
-                <table>
+                <table cellspacing="15">
                     <tr>
                         <th></th>
                         <th>Current</th>
@@ -504,7 +584,7 @@
             </fieldset>
             <fieldset class="patient-details">
                 <legend>IYCN</legend>
-                <table>
+                <table cellspacing="15">
                     <tr>
                         <th></th>
                         <th>Current</th>
@@ -523,16 +603,21 @@
                     </tr>
                     <tr>
                         <td>Infant Feeding Option</td>
-                        <div style="float: left; padding-right: 50px">
-                            <obs conceptId="162737AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerConceptId="1107AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerLabel="EBF" style="checkbox" /><br />
-                            <obs conceptId="162737AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerConceptId="136443AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerLabel="BF" style="checkbox" /><br />
-                            <obs conceptId="162737AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerConceptId="460AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerLabel="CF" style="checkbox" /><br />
-                            <obs conceptId="162737AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerConceptId="5334AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerLabel="ERF" style="checkbox" /><br />
-                            <obs conceptId="162737AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerConceptId="5245AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerLabel="MF" style="checkbox" /><br />
-                        </div>
+                        <td>
+                            <div style="float: left; padding-right: 50px">
+                                <obs conceptId="162737AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerConceptId="1107AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerLabel="EBF" style="checkbox" /><br />
+                                <obs conceptId="162737AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerConceptId="136443AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerLabel="BF" style="checkbox" /><br />
+                                <obs conceptId="162737AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerConceptId="460AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerLabel="CF" style="checkbox" /><br />
+                                <obs conceptId="162737AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerConceptId="5334AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerLabel="ERF" style="checkbox" /><br />
+                                <obs conceptId="162737AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerConceptId="5245AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerLabel="MF" style="checkbox" /><br />
+                            </div>
+                        </td>
                     </tr>
                     <tr>
-                        <td></td>
+                        <td>&#160;</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Other Details:</strong></td>
                     </tr>
                     <tr>
                         <td><obs conceptId="1198AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerConceptId="782AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerLabel="Vitamin A" style="checkbox" /></td>
@@ -550,14 +635,14 @@
             <h2 class="StepTitle">DIAGNOSIS</h2>
             <fieldset class="patient-details">
                 <legend>Patient Diagnosis</legend>
-                <table style="width: 70%;" border="0">
+                <table cellspacing="15">
                     <tr>
-                        <th align="left">Diagnosis</th>
+                        <th>Diagnosis</th>
                         <th>Recent Diagnosis</th>
                     </tr>
                     <tr>
                         <td>
-                            <obs conceptId="159395AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" rows="10" style="textarea" />
+                            <obs conceptId="159395AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" rows="10" cols="85" style="textarea" />
                         </td>
                         <td>
                             <recentObs conceptId="159395AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
@@ -568,14 +653,22 @@
         </div>
         <div id="step-2">
             <h2 class="StepTitle">NUTRITION INTERVENTIONS</h2>
-            <div class="ke-form-content">
-                <div>
-                    <recentObs conceptId="159395AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
-                </div>
-		<div>
-                    <obs conceptId="159395AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" rows="10" style="textarea" />
-		</div>
-            </div>
+            <fieldset class="patient-details">
+                <table cellspacing="15">
+                    <tr>
+                        <th>Intervention</th>
+                        <th>Recent Intervention</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <obs conceptId="159395AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" rows="10" cols="85" style="textarea" />
+                        </td>
+                        <td>
+                            <recentObs conceptId="159395AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                        </td>
+                    </tr>
+                </table>
+            </fieldset>
         </div>
         <fieldset class="tca-part">
             <legend>Return Visit</legend>
