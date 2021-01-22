@@ -63,9 +63,9 @@
             var hip = parseFloat(getValue('hc.value'));
             if (!isNaN(waist) &amp;&amp; !isNaN(hip)) {
                 var whr = waist / hip;
-                displayWHR = bmi.toFixed(2);
+                displayWHR = whr.toFixed(2);
+                jQuery('#calculated-whr').html(displayWHR);
             }
-            jQuery('#calculated-whr').html(displayWHR);
         }
         
         function displayRecentWhr() {
@@ -83,6 +83,8 @@
         jQuery(function () {
             getField('weight.value').change(onWeightOrHeightChange);
             getField('height.value').change(onWeightOrHeightChange);
+            getField('wc.value').change(onWaistOrHipChange);
+            getField('hc.value').change(onWaistOrHipChange);
             onWeightOrHeightChange();
             displayRecentBmi();
             onWaistOrHipChange();
@@ -334,7 +336,7 @@
                     </tr>
                     <tr></tr>
                     <tr>
-                        <td>1.a How often does this happen?</td>
+                        <td>1.a) How often does this happen?</td>
                         <td><obs conceptId="160658AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" labelText=" " answerConceptIds="1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" style="radio" answerLabels="Yes,No" /></td>
                     </tr>
                     <tr></tr>
@@ -344,7 +346,7 @@
                     </tr>
                     <tr></tr>
                     <tr>
-                        <td>2.a How often does this happen?</td>
+                        <td>2.a) How often does this happen?</td>
                         <td><obs conceptId="160658AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" labelText=" " answerConceptIds="1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" style="radio" answerLabels="Yes,No" /></td>
                     </tr>
                     <tr></tr>
@@ -354,7 +356,7 @@
                     </tr>
                     <tr></tr>
                     <tr>
-                        <td>3.a How often does this happen?</td>
+                        <td>3.a) How often does this happen?</td>
                         <td><obs conceptId="160658AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" labelText=" " answerConceptIds="1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" style="radio" answerLabels="Yes,No" /></td>
                     </tr>
                 </table>
