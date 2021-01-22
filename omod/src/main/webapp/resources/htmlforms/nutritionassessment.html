@@ -65,18 +65,18 @@
                 var whr = waist / hip;
                 displayWHR = bmi.toFixed(2);
             }
-            jQuery('#calculated-bmi').html(display);
+            jQuery('#calculated-whr').html(displayWHR);
         }
         
-        function displayRecentBmi() {
-            var weightKg = "<lookup expression="fn.latestObs(5089).valueNumeric"/>"
-            var heightM = ("<lookup expression="fn.latestObs(5090).valueNumeric"/>")/100
-            var bmi = '';
-            var recent_bmi ='';
-            if (!isNaN(weightKg) &amp;&amp; !isNaN(heightM)) {
-                bmi = weightKg / (heightM * heightM);
-                recent_bmi = bmi.toFixed(2);
-                jq('#recent-calculated-bmi').html(recent_bmi);
+        function displayRecentWhr() {
+            var waistCm = "<lookup expression="fn.latestObs(163080).valueNumeric"/>"
+            var hipCm = ("<lookup expression="fn.latestObs(163081).valueNumeric"/>")/100
+            var whr='';
+            var recent_whr ='';
+            if (!isNaN(waistCm) &amp;&amp; !isNaN(hipCm)) {
+                whr = waistCm / hipCm;
+                recent_whr = whr.toFixed(2);
+                jq('#recent-calculated-whr').html(recent_whr);
             }
         }
 
@@ -85,7 +85,8 @@
             getField('height.value').change(onWeightOrHeightChange);
             onWeightOrHeightChange();
             displayRecentBmi();
-            
+            onWaistOrHipChange();
+            displayRecentWhr()
         });
     </script>
 
@@ -178,11 +179,11 @@
                     <tr class="patient-details">
                         <td>HC</td>
                         <td>
-                            <obs conceptId="163080AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" id="hc"/>
+                            <obs conceptId="163081AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" id="hc"/>
                         </td>
                         <td>
                             <span class="value">
-                                <recentObs conceptId="163080AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                                <recentObs conceptId="163081AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
                             </span>
                         </td>
                     </tr>
