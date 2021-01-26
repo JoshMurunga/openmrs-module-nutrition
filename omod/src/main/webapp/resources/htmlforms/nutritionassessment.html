@@ -88,7 +88,44 @@
             onWeightOrHeightChange();
             displayRecentBmi();
             onWaistOrHipChange();
-            displayRecentWhr()
+            displayRecentWhr();
+            jq("#tbl-medical-history").hide();
+            jq("#tbl-chronic-illness").hide();
+            jq("#pmtct").hide();
+            
+            jq("#medical-history").change(medicalHistorySelected);
+            //start here set default unselected
+            
+            var medicalHistorySelected = function() {
+                var val = getValue('medical-history.value');
+                var history = jq('diagnosis-type').val('');
+                if (val == "false" || val == 1066){
+                    jq("#tbl-medical-history").hide();
+                    clearHiddenSections([history]);
+                }else {
+                    jq("#tbl-medical-history").show();
+                }
+            }
+            
+            var chronicIllnessesSelected = function() {
+                var val = getValue('chronic-illness.value');
+                var illness = jq('.illness-chronic select').val('');
+                var onset = jq('.onset-date-chronic-illness input').val('');
+                if (val == "false" || val == 1066){
+                    jq("#tbl-chronic-illness").hide();
+                    clearHiddenSections([illness, onset]);
+                    getField('chronic.error').html('Please specify the chronic illness.').hide();
+                }else {
+                    jq("#tbl-chronic-illness").show();
+                }
+            }
+            
+            var pgender = "<lookup expression="patient.gender" />";
+            var ppregnant = "<lookup expression="fn.latestObs(5272).getValueCoded()" />";
+            
+            if (pgender == 'F' &amp;&amp; ppregnant == 1065) {
+                jq("#pmtct").show();
+            }
         });
     </script>
 
@@ -291,7 +328,7 @@
                                 <obsgroup groupingConceptId="159947AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA">
                                     <tr>
                                         <td>
-                                            <obs conceptId="6042AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerClasses="Diagnosis" id="diagnosis-type" style="autocomplete"/>
+                                            <obs conceptId="6042AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerClasses="Diagnosis" id="oportunistic-infections" style="autocomplete"/>
                                         </td>
                                     </tr>
                                 </obsgroup>
@@ -435,103 +472,99 @@
                     </tr>
                 </table>
             </fieldset>
-            <fieldset class="patient-details">
-                <legend>NCDs and Risk Factors</legend>
-                <table>
-                    <tr>
-                        <div>
-                            Medical History? &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
-                            <obs id="known-allergies" conceptId="160557AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"  style="yes_no"/>
-                            <span style="color:red;"><strong>*</strong></span>
-                        </div>
+            <includeIf velocityTest="$patient.age &gt; 2">
+                <fieldset class="patient-details">
+                    <legend>NCDs and Risk Factors</legend>
+                    <table>
                         <tr>
-                            <td>&#160;</td>
+                            <div>
+                                Medical History? &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                                <obs id="medical-history" conceptId="160557AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"  style="yes_no"/>
+                                <span style="color:red;"><strong>*</strong></span>
+                            </div>
+                            <table border="0" id="tbl-medical-history">
+                                <tr>
+                                    <th align="left">Diagnosis</th>
+                                </tr>
+                                <repeat>
+                                    <template>
+                                        <obsgroup groupingConceptId="159947AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA">
+                                            <tr>
+                                                <td>
+                                                    <obs conceptId="6042AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerClasses="Diagnosis" id="diagnosis-type" style="autocomplete"/>
+                                                </td>
+                                            </tr>
+                                        </obsgroup>
+                                    </template>
+                                    <render n="11" concept="Diagnosis"/>
+                                    <render n="12" concept="Diagnosis"/>
+                                    <render n="13" concept="Diagnosis"/>
+                                    <render n="14" concept="Diagnosis"/>
+                                    <render n="15" concept="Diagnosis"/>
+                                </repeat>
+                            </table>
                         </tr>
-                        <table style="width: 70%;" border="0">
-                            <tr>
-                                <th align="left">Diagnosis</th>
-                            </tr>
-                            <repeat>
-                                <template>
-                                    <obsgroup groupingConceptId="159947AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA">
-                                        <tr>
-                                            <td>
-                                                <obs conceptId="6042AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerClasses="Diagnosis" id="diagnosis-type" style="autocomplete"/>
-                                            </td>
-                                        </tr>
-                                    </obsgroup>
-                                </template>
-                                <render n="11" concept="Diagnosis"/>
-                                <render n="12" concept="Diagnosis"/>
-                                <render n="13" concept="Diagnosis"/>
-                                <render n="14" concept="Diagnosis"/>
-                                <render n="15" concept="Diagnosis"/>
-                            </repeat>
-                        </table>
-                    </tr>
-                    <tr>
-                        <div>
-                            Family history of chronic diseases? &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
-                            <obs id="known-allergies" conceptId="160557AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"  style="yes_no"/>
-                            <span style="color:red;"><strong>*</strong></span>
-                        </div>
                         <tr>
-                            <td>&#160;</td>
+                            <div>
+                                Family history of chronic diseases? &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                                <obs id="chronic-illness" conceptId="160557AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"  style="yes_no"/>
+                                <span style="color:red;"><strong>*</strong></span>
+                            </div>
+                            <table id="tbl-chronic-illness">
+                                <tr>
+                                    <th style="color: #888">Illness</th>
+                                    <th style="color: #888; text-align: center">Onset Date</th>
+                                </tr>
+                                <repeat>
+                                    <template>
+                                        <obsgroup groupingConceptId="159392AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA">
+                                            <tr>
+                                                <td>
+                                                    <obs
+                                                            conceptId="1284AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" class="illness-chronic"
+                                                            answerConceptIds="149019AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,148432AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,153754AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,159351AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,119270AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,120637AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,145438AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,1295AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,120576AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,119692AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,120291AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,119481AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,118631AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,117855AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,117789AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,139071AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,115728AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,117399AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,117321AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,151342AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,133687AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,115115AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,114662AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,117703AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,118976AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                                                            answerLabels="Alzheimer's Disease and other Dementias,Arthritis,Asthma,Cancer,Cardiovascular diseases,Chronic Hepatitis,Chronic Kidney Disease,Chronic Obstructive Pulmonary Disease(COPD),Chronic Renal Failure,Cystic Fibrosis,Deafness and Hearing impairment,Diabetes,Endometriosis,Epilepsy,Glaucoma,Heart Disease,Hyperlipidaemia,Hypertension,Hypothyroidism,Mental illness,Multiple Sclerosis,Obesity,Osteoporosis,Sickle Cell Anaemia,Thyroid disease"
+                                                            style="dropdown" id="chronic"
+                                                    />
+                                                </td>
+                                                <td><obs class="onset-date-chronic-illness" conceptId="159948AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" allowFutureDates="false" /></td>
+                                            </tr>
+                                        </obsgroup>
+                                    </template>
+                                    <render n="1" concept="Drug"/>
+                                    <render n="2" concept="Drug"/>
+                                    <render n="3" concept="Drug"/>
+                                    <render n="4" concept="Drug"/>
+                                    <render n="5" concept="Drug"/>
+                                </repeat>
+                            </table>
                         </tr>
-                        <table id="tbl-chronic-illness">
-                            <tr>
-                                <th style="color: #888">Illness</th>
-                                <th style="color: #888; text-align: center">Onset Date</th>
-                            </tr>
-                            <repeat>
-                                <template>
-                                    <obsgroup groupingConceptId="159392AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA">
-                                        <tr>
-                                            <td>
-                                                <obs
-                                                        conceptId="1284AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" class="illness-chronic"
-                                                        answerConceptIds="149019AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,148432AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,153754AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,159351AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,119270AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,120637AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,145438AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,1295AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,120576AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,119692AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,120291AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,119481AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,118631AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,117855AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,117789AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,139071AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,115728AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,117399AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,117321AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,151342AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,133687AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,115115AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,114662AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,117703AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,118976AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-                                                        answerLabels="Alzheimer's Disease and other Dementias,Arthritis,Asthma,Cancer,Cardiovascular diseases,Chronic Hepatitis,Chronic Kidney Disease,Chronic Obstructive Pulmonary Disease(COPD),Chronic Renal Failure,Cystic Fibrosis,Deafness and Hearing impairment,Diabetes,Endometriosis,Epilepsy,Glaucoma,Heart Disease,Hyperlipidaemia,Hypertension,Hypothyroidism,Mental illness,Multiple Sclerosis,Obesity,Osteoporosis,Sickle Cell Anaemia,Thyroid disease"
-                                                        style="dropdown" id="chronic"
-                                                />
-                                            </td>
-                                            <td><obs class="onset-date-chronic-illness" conceptId="159948AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" allowFutureDates="false" /></td>
-                                        </tr>
-                                    </obsgroup>
-                                </template>
-                                <render n="1" concept="Drug"/>
-                                <render n="2" concept="Drug"/>
-                                <render n="3" concept="Drug"/>
-                                <render n="4" concept="Drug"/>
-                                <render n="5" concept="Drug"/>
-                            </repeat>
-                        </table>
-                    </tr>
-                    <tr>
-                        <td>
-                            Do you smoke? &#160;&#160;
-                            <obs conceptId="164949"
-                                answerConceptIds="1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-                                answerLabel="Yes,No"
-                                style="radio"
-                                id="on-ipt" />
-                            <br/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Do you take alcohol? &#160;&#160;
-                            <obs conceptId="164949"
-                                answerConceptIds="1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-                                answerLabel="Yes,No"
-                                style="radio"
-                                id="on-ipt" />
-                            <br/>
-                        </td>
-                    </tr>
-                </table>
-            </fieldset>
-            <fieldset class="patient-details">
+                        <tr>
+                            <td>
+                                Do you smoke? &#160;&#160;
+                                <obs conceptId="164949"
+                                    answerConceptIds="1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                                    answerLabel="Yes,No"
+                                    style="radio"
+                                    id="on-ipt" />
+                                <br/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Do you take alcohol? &#160;&#160;
+                                <obs conceptId="164949"
+                                    answerConceptIds="1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                                    answerLabel="Yes,No"
+                                    style="radio"
+                                    id="on-ipt" />
+                                <br/>
+                            </td>
+                        </tr>
+                    </table>
+                </fieldset>
+            </includeIf>
+            <fieldset class="patient-details" id="pmtct">
                 <legend>PMTCT</legend>
                 <table cellspacing="15">
                     <tr>
@@ -585,54 +618,56 @@
                     </tr>
                 </table>
             </fieldset>
-            <fieldset class="patient-details">
-                <legend>IYCN</legend>
-                <table cellspacing="15">
-                    <tr>
-                        <th></th>
-                        <th>Current</th>
-                        <th>Recent</th>
-                    </tr>
-                    <tr>
-                        <td>Birth Weight</td>
-                        <td>
-                            <obs conceptId="163080AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" id="wc"/>
-                        </td>
-                        <td>
-                            <span class="value">
-                                <recentObs conceptId="163080AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
-                            </span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Infant Feeding Option</td>
-                        <td>
-                            <div style="float: left; padding-right: 50px">
-                                <obs conceptId="162737AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerConceptId="1107AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerLabel="EBF" style="checkbox" /><br />
-                                <obs conceptId="162737AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerConceptId="136443AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerLabel="BF" style="checkbox" /><br />
-                                <obs conceptId="162737AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerConceptId="460AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerLabel="CF" style="checkbox" /><br />
-                                <obs conceptId="162737AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerConceptId="5334AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerLabel="ERF" style="checkbox" /><br />
-                                <obs conceptId="162737AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerConceptId="5245AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerLabel="MF" style="checkbox" /><br />
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>&#160;</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Other Details:</strong></td>
-                    </tr>
-                    <tr>
-                        <td><obs conceptId="1198AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerConceptId="782AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerLabel="Vitamin A" style="checkbox" /></td>
-                    </tr>
-                    <tr>
-                        <td><obs conceptId="1198AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerConceptId="782AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerLabel="Immunization" style="checkbox" /></td>
-                    </tr>
-                    <tr>
-                        <td><obs conceptId="1198AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerConceptId="782AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerLabel="Deworming" style="checkbox" /></td>
-                    </tr>
-                </table>
-            </fieldset>
+            <includeIf velocityTest="$patient.age &lt; 2">
+                <fieldset class="patient-details">
+                    <legend>IYCN</legend>
+                    <table cellspacing="15">
+                        <tr>
+                            <th></th>
+                            <th>Current</th>
+                            <th>Recent</th>
+                        </tr>
+                        <tr>
+                            <td>Birth Weight</td>
+                            <td>
+                                <obs conceptId="163080AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" id="wc"/>
+                            </td>
+                            <td>
+                                <span class="value">
+                                    <recentObs conceptId="163080AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Infant Feeding Option</td>
+                            <td>
+                                <div style="float: left; padding-right: 50px">
+                                    <obs conceptId="162737AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerConceptId="1107AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerLabel="EBF" style="checkbox" /><br />
+                                    <obs conceptId="162737AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerConceptId="136443AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerLabel="BF" style="checkbox" /><br />
+                                    <obs conceptId="162737AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerConceptId="460AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerLabel="CF" style="checkbox" /><br />
+                                    <obs conceptId="162737AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerConceptId="5334AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerLabel="ERF" style="checkbox" /><br />
+                                    <obs conceptId="162737AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerConceptId="5245AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerLabel="MF" style="checkbox" /><br />
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>&#160;</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Other Details:</strong></td>
+                        </tr>
+                        <tr>
+                            <td><obs conceptId="1198AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerConceptId="782AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerLabel="Vitamin A" style="checkbox" /></td>
+                        </tr>
+                        <tr>
+                            <td><obs conceptId="1198AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerConceptId="782AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerLabel="Immunization" style="checkbox" /></td>
+                        </tr>
+                        <tr>
+                            <td><obs conceptId="1198AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerConceptId="782AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerLabel="Deworming" style="checkbox" /></td>
+                        </tr>
+                    </table>
+                </fieldset>
+            </includeIf>
         </div>
         <div id="step-2">
             <h2 class="StepTitle">DIAGNOSIS</h2>
@@ -644,8 +679,8 @@
                         <th>Recent Diagnosis</th>
                     </tr>
                     <tr>
-                        <td>
-                            <obs conceptId="159395AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" rows="10" cols="85" style="textarea" />
+                        <td width="65%">
+                            <obs conceptId="159395AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" rows="10" style="textarea" />
                         </td>
                         <td>
                             <recentObs conceptId="159395AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
@@ -663,8 +698,8 @@
                         <th>Recent Intervention</th>
                     </tr>
                     <tr>
-                        <td>
-                            <obs conceptId="159395AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" rows="10" cols="85" style="textarea" />
+                        <td width="65%">
+                            <obs conceptId="159395AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" rows="10" style="textarea" />
                         </td>
                         <td>
                             <recentObs conceptId="159395AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
