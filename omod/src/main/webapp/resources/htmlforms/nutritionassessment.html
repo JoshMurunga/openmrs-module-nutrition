@@ -92,33 +92,11 @@
             jq("#tbl-medical-history").hide();
             jq("#tbl-chronic-illness").hide();
             jq("#pmtct").hide();
+            jq("#hq-1-a").hide();
+            jq("#hq-2-a").hide();
+            jq("#hq-3-a").hide();
             
-            jq("#medical-history").change(medicalHistorySelected);
-            //start here set default unselected
-            
-            var medicalHistorySelected = function() {
-                var val = getValue('medical-history.value');
-                var history = jq('diagnosis-type').val('');
-                if (val == "false" || val == 1066){
-                    jq("#tbl-medical-history").hide();
-                    clearHiddenSections([history]);
-                }else {
-                    jq("#tbl-medical-history").show();
-                }
-            }
-            
-            var chronicIllnessesSelected = function() {
-                var val = getValue('chronic-illness.value');
-                var illness = jq('.illness-chronic select').val('');
-                var onset = jq('.onset-date-chronic-illness input').val('');
-                if (val == "false" || val == 1066){
-                    jq("#tbl-chronic-illness").hide();
-                    clearHiddenSections([illness, onset]);
-                    getField('chronic.error').html('Please specify the chronic illness.').hide();
-                }else {
-                    jq("#tbl-chronic-illness").show();
-                }
-            }
+            jq("#hhs").change(hungerAssessment);
             
             var pgender = "<lookup expression="patient.gender" />";
             var ppregnant = "<lookup expression="fn.latestObs(5272).getValueCoded()" />";
@@ -366,35 +344,53 @@
             </fieldset>
             <fieldset class="patient-details">
                 <legend>Household Hunger Score</legend>
-                <table>
+                <table id="hhs">
                     <tr>
                         <td>1. In the past four weeks, was there ever no food to eat of any kind in your household because of lack of resources to get food?</td>
-                        <td><obs conceptId="160658AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" labelText=" " answerConceptIds="1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" style="radio" answerLabels="Yes,No" /></td>
+                        <td>
+                            <input type="radio" name="question-1" class="question-1" value="1065"/> Yes
+                            <input type="radio" name="question-1" class="question-1" value="1066"/> No
+                        </td>
                     </tr>
                     <tr></tr>
-                    <tr>
+                    <tr id="hq-1-a">
                         <td>1.a) How often does this happen?</td>
-                        <td><obs conceptId="160658AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" labelText=" " answerConceptIds="1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" style="radio" answerLabels="Yes,No" /></td>
+                        <td>
+                            <input type="radio" name="question-1-a" class="question-1-a" value="1065"/> Yes
+                            <input type="radio" name="question-1-a" class="question-1-a" value="1066"/> No
+                        </td>
                     </tr>
                     <tr></tr>
                     <tr>
                         <td>2. In the past four weeks, did you or any household member go to sleep at night hungry because there was not enough food?</td>
-                        <td><obs conceptId="160658AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" labelText=" " answerConceptIds="1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" style="radio" answerLabels="Yes,No" /></td>
+                        <td>
+                            <input type="radio" name="question-2" class="question-2" value="1065"/> Yes
+                            <input type="radio" name="question-2" class="question-2" value="1066"/> No
+                        </td>
                     </tr>
                     <tr></tr>
-                    <tr>
+                    <tr id="hq-2-a">
                         <td>2.a) How often does this happen?</td>
-                        <td><obs conceptId="160658AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" labelText=" " answerConceptIds="1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" style="radio" answerLabels="Yes,No" /></td>
+                        <td>
+                            <input type="radio" name="question-2-a" class="question-2-a" value="1065"/> Yes
+                            <input type="radio" name="question-2-a" class="question-2-a" value="1066"/> No
+                        </td>
                     </tr>
                     <tr></tr>
                     <tr>
                         <td>3. In the past four weeks, did you or any household member go a whole day and night without eating anything because there was not enough food?</td>
-                        <td><obs conceptId="160658AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" labelText=" " answerConceptIds="1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" style="radio" answerLabels="Yes,No" /></td>
+                        <td>
+                            <input type="radio" name="question-3" class="question-3" value="1065"/> Yes
+                            <input type="radio" name="question-3" class="question-3" value="1066"/> No
+                        </td>
                     </tr>
                     <tr></tr>
-                    <tr>
+                    <tr id="hq-3-a">
                         <td>3.a) How often does this happen?</td>
-                        <td><obs conceptId="160658AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" labelText=" " answerConceptIds="1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" style="radio" answerLabels="Yes,No" /></td>
+                        <td>
+                            <input type="radio" name="question-3-a" class="question-3-a" value="1065"/> Yes
+                            <input type="radio" name="question-3-a" class="question-3-a" value="1066"/> No
+                        </td>
                     </tr>
                 </table>
             </fieldset>
