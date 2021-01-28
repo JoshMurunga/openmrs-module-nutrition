@@ -79,6 +79,30 @@
                 jq('#recent-calculated-whr').html(recent_whr);
             }
         }
+        
+        var hungerAssessment1  = function () {
+            var val = jq(this).val();
+            const YES_CONCEPT_ID = 1065;
+            const NO_CONCEPT_ID = 1066;
+            var assessmentRadios = jq('#hq-1').find('input[type=radio]');
+            var assessmentYesResponses = [];
+            var assessmentNoResponses = [];
+            
+            //Fetch responses for the assessment questions
+            jq.each(assessmentRadios, function(){
+                //Push any responses to the respective assessmentYesResponses and assessmentNoResponses array
+                if (this.value == YES_CONCEPT_ID &amp;&amp; this.checked == true) {
+                    assessmentYesResponses.push(this);
+                }
+                if (this.value == NO_CONCEPT_ID &amp;&amp; this.checked == true) {
+                    assessmentNoResponses.push(this);
+                }
+            });
+            
+            if(assessmentYesResponses.length &gt; 0) {
+                jq('#hq-1-a').show();
+            }
+        }
 
         jQuery(function () {
             getField('weight.value').change(onWeightOrHeightChange);
@@ -96,7 +120,10 @@
             jq("#hq-2-a").hide();
             jq("#hq-3-a").hide();
             
-            jq("#hhs").change(hungerAssessment);
+            var hhs = jq('#hhs');
+            clearHiddenSections([hhs]);
+            
+            jq("#hq-1").change(hungerAssessment1);
             
             var pgender = "<lookup expression="patient.gender" />";
             var ppregnant = "<lookup expression="fn.latestObs(5272).getValueCoded()" />";
@@ -345,7 +372,7 @@
             <fieldset class="patient-details">
                 <legend>Household Hunger Score</legend>
                 <table id="hhs">
-                    <tr>
+                    <tr id="hq-1">
                         <td>1. In the past four weeks, was there ever no food to eat of any kind in your household because of lack of resources to get food?</td>
                         <td>
                             <input type="radio" name="question-1" class="question-1" value="1065"/> Yes
@@ -361,7 +388,7 @@
                         </td>
                     </tr>
                     <tr></tr>
-                    <tr>
+                    <tr id="hq-2">
                         <td>2. In the past four weeks, did you or any household member go to sleep at night hungry because there was not enough food?</td>
                         <td>
                             <input type="radio" name="question-2" class="question-2" value="1065"/> Yes
@@ -377,7 +404,7 @@
                         </td>
                     </tr>
                     <tr></tr>
-                    <tr>
+                    <tr id="hq-3">
                         <td>3. In the past four weeks, did you or any household member go a whole day and night without eating anything because there was not enough food?</td>
                         <td>
                             <input type="radio" name="question-3" class="question-3" value="1065"/> Yes
