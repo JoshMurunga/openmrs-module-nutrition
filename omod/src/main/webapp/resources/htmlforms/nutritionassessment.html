@@ -29,6 +29,106 @@
     </style>
 
     <script type="text/javascript">
+        var onMedicalHistoryChange = function() {
+            var val = getValue('medical-history.value');
+            
+            if (val == "false" || val == 1066){
+                jq("#tbl-medical-history").hide();
+                jq('input[type=text].diagnosis-type').prop("val", "");
+            }else {
+                jq("#tbl-medical-history").show();
+            }
+        }
+        
+        var onChronicIllnessChange = function() {
+            var val = getValue('chronic-illness.value');
+            
+            if (val == "false" || val == 1066){
+                jq("#tbl-chronic-illness").hide();
+                jq('input[type=select].chronic').prop("selectedIndex", 0);
+            }else {
+                jq("#tbl-chronic-illness").show();
+            }
+        }
+        
+        var onHungerAssessmentaChange = function() {
+            var assessmentRadios = jq('#hq-1').find('input[type=radio]');
+            var assessmentYesResponses = [];
+            var assessmentNoResponses = [];
+            
+            jq.each(assessmentRadios, function(){
+                if (this.value == 1065 &amp;&amp; this.checked == true) {
+                    assessmentYesResponses.push(this);
+                }
+                if (this.value == 1066 &amp;&amp; this.checked == true) {
+                    assessmentNoResponses.push(this);
+                }
+            });
+            
+            if (assessmentYesResponses.length == 0 &amp;&amp; assessmentNoResponses.length == 0 ) {
+                //Prompt to complete assessment
+            }else{
+                if(assessmentYesResponses.length &gt; 0) {
+                    jq('#hq-1-a').show();
+                }
+                if(assessmentNoResponses.length &gt; 0) {
+                    jq('#hq-1-a').hide();
+                }
+            }
+        }
+        
+        var onHungerAssessmentbChange = function() {
+            var assessmentRadios = jq('#hq-2').find('input[type=radio]');
+            var assessmentYesResponses = [];
+            var assessmentNoResponses = [];
+            
+            jq.each(assessmentRadios, function(){
+                if (this.value == 1065 &amp;&amp; this.checked == true) {
+                    assessmentYesResponses.push(this);
+                }
+                if (this.value == 1066 &amp;&amp; this.checked == true) {
+                    assessmentNoResponses.push(this);
+                }
+            });
+            
+            if (assessmentYesResponses.length == 0 &amp;&amp; assessmentNoResponses.length == 0 ) {
+                //Prompt to complete assessment
+            }else{
+                if(assessmentYesResponses.length &gt; 0) {
+                    jq('#hq-2-a').show();
+                }
+                if(assessmentNoResponses.length &gt; 0) {
+                    jq('#hq-2-a').hide();
+                }
+            }
+        }
+        
+        var onHungerAssessmentcChange = function() {
+            var assessmentRadios = jq('#hq-3').find('input[type=radio]');
+            var assessmentYesResponses = [];
+            var assessmentNoResponses = [];
+            
+            jq.each(assessmentRadios, function(){
+                if (this.value == 1065 &amp;&amp; this.checked == true) {
+                    assessmentYesResponses.push(this);
+                }
+                if (this.value == 1066 &amp;&amp; this.checked == true) {
+                    assessmentNoResponses.push(this);
+                }
+            });
+            
+            if (assessmentYesResponses.length == 0 &amp;&amp; assessmentNoResponses.length == 0 ) {
+                //Prompt to complete assessment
+            }else{
+                if(assessmentYesResponses.length &gt; 0) {
+                    jq('#hq-3-a').show();
+                }
+                if(assessmentNoResponses.length &gt; 0) {
+                    jq('#hq-3-a').hide();
+                }
+            }
+        }
+        
         function onWeightOrHeightChange() {
             var display = '';
             var weightKg = parseFloat(getValue('weight.value'));
@@ -43,6 +143,16 @@
                 }
             }
             jQuery('#calculated-bmi').html(display);
+            
+            if (bmi &lt; 16 &amp;&amp; bmi &gt; 1) {
+                jq("#nutritional-status input[value=163302]").prop("checked", true);
+            } else if (bmi &gt; 16 &amp;&amp; bmi &lt; 18.5) {
+                jq("#nutritional-status input[value=163303]").prop("checked", true);
+            } else if (bmi &gt; 18.5 &amp;&amp; bmi &lt; 25) {
+                jq("#nutritional-status input[value=1115]").prop("checked", true);
+            } else if (bmi &gt; 25) {
+                jq("#nutritional-status input[value=114413]").prop("checked", true);
+            }
         }
         
         function displayRecentBmi() {
@@ -79,51 +189,37 @@
                 jq('#recent-calculated-whr').html(recent_whr);
             }
         }
-        
-        var hungerAssessment1  = function () {
-            var val = jq(this).val();
-            const YES_CONCEPT_ID = 1065;
-            const NO_CONCEPT_ID = 1066;
-            var assessmentRadios = jq('#hq-1').find('input[type=radio]');
-            var assessmentYesResponses = [];
-            var assessmentNoResponses = [];
-            
-            //Fetch responses for the assessment questions
-            jq.each(assessmentRadios, function(){
-                //Push any responses to the respective assessmentYesResponses and assessmentNoResponses array
-                if (this.value == YES_CONCEPT_ID &amp;&amp; this.checked == true) {
-                    assessmentYesResponses.push(this);
-                }
-                if (this.value == NO_CONCEPT_ID &amp;&amp; this.checked == true) {
-                    assessmentNoResponses.push(this);
-                }
-            });
-            
-            if(assessmentYesResponses.length &gt; 0) {
-                jq('#hq-1-a').show();
-            }
-        }
 
         jQuery(function () {
             getField('weight.value').change(onWeightOrHeightChange);
             getField('height.value').change(onWeightOrHeightChange);
             getField('wc.value').change(onWaistOrHipChange);
             getField('hc.value').change(onWaistOrHipChange);
+            jq('#medical-history').change(onMedicalHistoryChange);
+            jq('#chronic-illness').change(onChronicIllnessChange);
+            jq('#hq-1').change(onHungerAssessmentaChange);
+            jq('#hq-2').change(onHungerAssessmentbChange);
+            jq('#hq-3').change(onHungerAssessmentcChange);
+           
             onWeightOrHeightChange();
             displayRecentBmi();
             onWaistOrHipChange();
             displayRecentWhr();
+            onMedicalHistoryChange();
+            onChronicIllnessChange();
+            onHungerAssessmentaChange();
+            onHungerAssessmentbChange();
+            onHungerAssessmentcChange();
+            
             jq("#tbl-medical-history").hide();
+            jq('input[type=radio].medical-history').prop("checked", false);
             jq("#tbl-chronic-illness").hide();
+            jq('input[type=radio].chronic-illness').prop("checked", false);
             jq("#pmtct").hide();
             jq("#hq-1-a").hide();
             jq("#hq-2-a").hide();
             jq("#hq-3-a").hide();
-            
-            var hhs = jq('#hhs');
-            clearHiddenSections([hhs]);
-            
-            jq("#hq-1").change(hungerAssessment1);
+            jq('#nutritional-status input[type=radio]').attr("style", "pointer-events:none;");
             
             var pgender = "<lookup expression="patient.gender" />";
             var ppregnant = "<lookup expression="fn.latestObs(5272).getValueCoded()" />";
@@ -308,21 +404,21 @@
                 <legend>Clinical</legend>
                 <table cellspacing="15">
                     <tr>
-                        <th>Clinical assessment (not yet complete)</th>
+                        <th>Clinical assessment</th>
                         <th align="left">Current</th>
                         <th align="left">Recent</th>
                     </tr>
                     <tr>
                         <td>Unplanned Weight Loss</td>
                         <td>
-                            <obs conceptId="5356AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" 
-                                 answerConceptIds="1220AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,1221AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" 
-                                 style="dropdown" answerLabels="less than 5 percent,5 to 10 percent"
+                            <obs conceptId="159214AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" 
+                                 answerConceptIds="5332AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,5339AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" 
+                                 style="dropdown" answerLabels="weight loss &lt;= 10%,weight loss &gt; 10%"
                             />
                         </td>
                         <td>
                             <span class="value">
-                                <recentObs conceptId="679AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                                <recentObs conceptId="159214AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
                             </span>
                         </td>
                     </tr>
@@ -330,7 +426,7 @@
                         <th>OIs</th>
                         <repeat>
                             <template>
-                                <obsgroup groupingConceptId="159947AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA">
+                                <obsgroup groupingConceptId="131768AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA">
                                     <tr>
                                         <td>
                                             <obs conceptId="6042AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerClasses="Diagnosis" id="oportunistic-infections" style="autocomplete"/>
@@ -346,7 +442,7 @@
                         </repeat>
                         <td>
                             <span class="value">
-                                <recentObs conceptId="679AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                                <recentObs conceptId="6042AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
                             </span>
                         </td>
                     </tr>
@@ -363,20 +459,20 @@
                         </td>
                         <td>
                             <span class="value">
-                                <recentObs conceptId="679AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                                <recentObs conceptId="163300AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
                             </span>
                         </td>
                     </tr>
                 </table>
             </fieldset>
             <fieldset class="patient-details">
-                <legend>Household Hunger Score</legend>
+                <legend>Household Hunger Scale</legend>
                 <table id="hhs">
                     <tr id="hq-1">
                         <td>1. In the past four weeks, was there ever no food to eat of any kind in your household because of lack of resources to get food?</td>
                         <td>
-                            <input type="radio" name="question-1" class="question-1" value="1065"/> Yes
-                            <input type="radio" name="question-1" class="question-1" value="1066"/> No
+                            <input type="radio" name="question-1" class="question-1" id="hunger-question-1-y" value="1065"/> Yes
+                            <input type="radio" name="question-1" class="question-1" id="hunger-question-1-n" value="1066"/> No
                         </td>
                     </tr>
                     <tr></tr>
@@ -481,16 +577,25 @@
             <fieldset class="patient-details">
                 <legend>Physical</legend>
                 <table style="display: inline-block;" cellspacing="15">
-                    <tr><th>Physical activity assessment</th></tr>
+                    <tr>
+                        <th>Physical activity assessment</th>
+                        <th>Recent</th>
+                    </tr>
                     <tr class="patient-details">
                         <td>
-                            <obs    id="nutritional-status"
-                                        conceptId="163300AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-                                        answerConceptIds="1115AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,163302AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,163303AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,163303AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-                                        answerLabels="Never,Low,Medium,High"
-                                        style="radio"
-                                        answerSeparator="&lt;br /&gt;"
-                                />
+                            <obs    
+                                id="nutritional-status"
+                                conceptId="159364AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                                answerConceptIds="1090AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,1407AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,1115AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,1408AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                                answerLabels="Never,Low,Medium,High"
+                                style="radio"
+                                answerSeparator="&lt;br /&gt;"
+                            />
+                        </td>
+                        <td>
+                            <span class="value">
+                                <recentObs conceptId="159364AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                            </span>
                         </td>
                     </tr>
                 </table>
@@ -500,11 +605,14 @@
                     <legend>NCDs and Risk Factors</legend>
                     <table>
                         <tr>
-                            <div>
-                                Medical History? &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
-                                <obs id="medical-history" conceptId="160557AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"  style="yes_no"/>
-                                <span style="color:red;"><strong>*</strong></span>
-                            </div>
+                            <td>Medical History?</td>
+                            <td>
+                                <obs 
+                                    id="medical-history" conceptId="1633AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                                    answerConceptIds="1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                                    style="radio" answerLabels="Yes,No"
+                                />
+                            </td>
                             <table border="0" id="tbl-medical-history">
                                 <tr>
                                     <th align="left">Diagnosis</th>
@@ -528,11 +636,13 @@
                             </table>
                         </tr>
                         <tr>
-                            <div>
-                                Family history of chronic diseases? &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
-                                <obs id="chronic-illness" conceptId="160557AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"  style="yes_no"/>
-                                <span style="color:red;"><strong>*</strong></span>
-                            </div>
+                            <td>Family History of Chronic diseases?</td>
+                            <td>
+                                <obs id="chronic-illness" conceptId="162747AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                                    answerConceptIds="1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                                    style="radio" answerLabels="Yes,No"
+                                />
+                            </td>
                             <table id="tbl-chronic-illness">
                                 <tr>
                                     <th style="color: #888">Illness</th>
@@ -562,26 +672,18 @@
                                 </repeat>
                             </table>
                         </tr>
+                        <br />
                         <tr>
+                            <td>Do you smoke?</td>
                             <td>
-                                Do you smoke? &#160;&#160;
-                                <obs conceptId="164949"
-                                    answerConceptIds="1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-                                    answerLabel="Yes,No"
-                                    style="radio"
-                                    id="on-ipt" />
-                                <br/>
+                                <obs id="smoking" conceptId="163201AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"  style="yes_no"/>
                             </td>
                         </tr>
+                        <br />
                         <tr>
+                            <td>Do you take alcohol?</td>
                             <td>
-                                Do you take alcohol? &#160;&#160;
-                                <obs conceptId="164949"
-                                    answerConceptIds="1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-                                    answerLabel="Yes,No"
-                                    style="radio"
-                                    id="on-ipt" />
-                                <br/>
+                                <obs id="alcohol" conceptId="159449AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"  style="yes_no"/>
                             </td>
                         </tr>
                     </table>
@@ -598,7 +700,7 @@
                     <tr>
                         <td>Viral Load</td>
                         <td>
-                            <obs conceptId="163080AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" id="wc"/>
+                            <obs conceptId="163080AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" id="viral-load"/>
                         </td>
                         <td>
                             <span class="value">
@@ -609,7 +711,7 @@
                     <tr>
                         <td>Micronutrient Supplements</td>
                         <td>
-                            <obs conceptId="163080AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" id="wc"/>
+                            <obs conceptId="163080AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" id="mic-supplements"/>
                         </td>
                         <td>
                             <span class="value">
@@ -620,22 +722,22 @@
                     <tr>
                         <td>ANC Visits</td>
                         <td>
-                            <obs conceptId="163080AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" id="wc"/>
+                            <obs conceptId="160446AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" id="anc-visit"/>
                         </td>
                         <td>
                             <span class="value">
-                                <recentObs conceptId="163080AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                                <recentObs conceptId="160446AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
                             </span>
                         </td>
                     </tr>
                     <tr>
                         <td>Trimester</td>
                         <td>
-                            <obs conceptId="163080AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" id="wc"/>
+                            <obs conceptId="160665AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" id="trimester"/>
                         </td>
                         <td>
                             <span class="value">
-                                <recentObs conceptId="163080AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                                <recentObs conceptId="160665AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
                             </span>
                         </td>
                     </tr>
@@ -653,11 +755,11 @@
                         <tr>
                             <td>Birth Weight</td>
                             <td>
-                                <obs conceptId="163080AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" id="wc"/>
+                                <obs conceptId="5916AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" id="birth-weight"/>
                             </td>
                             <td>
                                 <span class="value">
-                                    <recentObs conceptId="163080AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                                    <recentObs conceptId="5916AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
                                 </span>
                             </td>
                         </tr>
@@ -665,11 +767,11 @@
                             <td>Infant Feeding Option</td>
                             <td>
                                 <div style="float: left; padding-right: 50px">
-                                    <obs conceptId="162737AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerConceptId="1107AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerLabel="EBF" style="checkbox" /><br />
-                                    <obs conceptId="162737AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerConceptId="136443AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerLabel="BF" style="checkbox" /><br />
-                                    <obs conceptId="162737AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerConceptId="460AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerLabel="CF" style="checkbox" /><br />
-                                    <obs conceptId="162737AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerConceptId="5334AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerLabel="ERF" style="checkbox" /><br />
-                                    <obs conceptId="162737AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerConceptId="5245AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerLabel="MF" style="checkbox" /><br />
+                                    <obs conceptId="1151AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerConceptId="5526AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerLabel="EBF" style="checkbox" /><br />
+                                    <obs conceptId="1151AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerConceptId="1150AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerLabel="BF" style="checkbox" /><br />
+                                    <obs conceptId="1151AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerConceptId="5254AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerLabel="CF" style="checkbox" /><br />
+                                    <obs conceptId="1151AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerConceptId="5254AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerLabel="ERF" style="checkbox" /><br />
+                                    <obs conceptId="1151AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerConceptId="6046AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerLabel="MF" style="checkbox" /><br />
                                 </div>
                             </td>
                         </tr>
@@ -680,13 +782,13 @@
                             <td><strong>Other Details:</strong></td>
                         </tr>
                         <tr>
-                            <td><obs conceptId="1198AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerConceptId="782AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerLabel="Vitamin A" style="checkbox" /></td>
+                            <td><obs conceptId="161628AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerConceptId="86339AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerLabel="Vitamin A" style="checkbox" /></td>
                         </tr>
                         <tr>
-                            <td><obs conceptId="1198AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerConceptId="782AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerLabel="Immunization" style="checkbox" /></td>
+                            <td><obs conceptId="161628AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerConceptId="160564AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerLabel="Immunization" style="checkbox" /></td>
                         </tr>
                         <tr>
-                            <td><obs conceptId="1198AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerConceptId="782AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerLabel="Deworming" style="checkbox" /></td>
+                            <td><obs conceptId="161628AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerConceptId="159922AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" answerLabel="Deworming" style="checkbox" /></td>
                         </tr>
                     </table>
                 </fieldset>
@@ -696,17 +798,17 @@
             <h2 class="StepTitle">DIAGNOSIS</h2>
             <fieldset class="patient-details">
                 <legend>Patient Diagnosis</legend>
-                <table cellspacing="15">
+                <table width="100%" cellspacing="15">
                     <tr>
                         <th>Diagnosis</th>
                         <th>Recent Diagnosis</th>
                     </tr>
                     <tr>
                         <td width="65%">
-                            <obs conceptId="159395AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" rows="10" style="textarea" />
+                            <obs conceptId="161011AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" rows="10" style="textarea" />
                         </td>
                         <td>
-                            <recentObs conceptId="159395AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                            <recentObs conceptId="161011AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
                         </td>
                     </tr>
                 </table>
@@ -715,17 +817,17 @@
         <div id="step-2">
             <h2 class="StepTitle">NUTRITION INTERVENTIONS</h2>
             <fieldset class="patient-details">
-                <table cellspacing="15">
+                <table width="100%" cellspacing="15">
                     <tr>
                         <th>Intervention</th>
                         <th>Recent Intervention</th>
                     </tr>
                     <tr>
                         <td width="65%">
-                            <obs conceptId="159395AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" rows="10" style="textarea" />
+                            <obs conceptId="160632AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" rows="10" style="textarea" />
                         </td>
                         <td>
-                            <recentObs conceptId="159395AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                            <recentObs conceptId="160632AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
                         </td>
                     </tr>
                 </table>
