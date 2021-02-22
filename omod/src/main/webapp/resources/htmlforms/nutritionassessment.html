@@ -73,6 +73,9 @@
                 }
                 if(assessmentNoResponses.length &gt; 0) {
                     jq('#hq-1-a').hide();
+                    jq('#hq-1-a').find('input[type=radio]').each(function () {
+                        this.checked = false;
+                    });
                 }
             }
         }
@@ -99,6 +102,9 @@
                 }
                 if(assessmentNoResponses.length &gt; 0) {
                     jq('#hq-2-a').hide();
+                    jq('#hq-2-a').find('input[type=radio]').each(function () {
+                        this.checked = false;
+                    });
                 }
             }
         }
@@ -125,8 +131,146 @@
                 }
                 if(assessmentNoResponses.length &gt; 0) {
                     jq('#hq-3-a').hide();
+                    jq('#hq-3-a').find('input[type=radio]').each(function () {
+                        this.checked = false;
+                    });
                 }
             }
+        }
+        
+        var onHouseholdHungerChange = function() {
+            var assessmentRadiosa = jq('#hq-1').find('input[type=radio]');
+            var assessmentRadiosb = jq('#hq-2').find('input[type=radio]');
+            var assessmentRadiosc = jq('#hq-3').find('input[type=radio]');
+            
+            var assessmentYesResponsesa = [];
+            var assessmentYesResponsesb = [];
+            var assessmentYesResponsesc = [];
+            var assessmentNoResponsesa = [];
+            var assessmentNoResponsesb = [];
+            var assessmentNoResponsesc = [];
+            
+            jq.each(assessmentRadiosa, function(){
+                if (this.value == 1065 &amp;&amp; this.checked == true) {
+                    assessmentYesResponsesa.push(this);
+                }
+                if (this.value == 1066 &amp;&amp; this.checked == true) {
+                    assessmentNoResponsesa.push(this);
+                }
+            });
+            
+            jq.each(assessmentRadiosb, function(){
+                if (this.value == 1065 &amp;&amp; this.checked == true) {
+                    assessmentYesResponsesb.push(this);
+                }
+                if (this.value == 1066 &amp;&amp; this.checked == true) {
+                    assessmentNoResponsesb.push(this);
+                }
+            });
+            
+            jq.each(assessmentRadiosc, function(){
+                if (this.value == 1065 &amp;&amp; this.checked == true) {
+                    assessmentYesResponsesc.push(this);
+                }
+                if (this.value == 1066 &amp;&amp; this.checked == true) {
+                    assessmentNoResponsesc.push(this);
+                }
+            });
+            
+            if(assessmentNoResponsesa.length &gt; 0 &amp;&amp; assessmentNoResponsesb.length &gt; 0 &amp;&amp; assessmentNoResponsesc.length &gt; 0) {
+                jq("#hhs-result-score input[value=1660]").prop("checked", true);
+                jq('#hhs-result-score input[type=radio]').attr("style", "pointer-events:none;");
+            }
+        }
+        
+        var onHouseholdHungerScore = function () {
+            var hungerRadioa = jq('#hq-1-a').find('input[type=radio]')
+            var hungerRadiob = jq('#hq-2-a').find('input[type=radio]')
+            var hungerRadioc = jq('#hq-3-a').find('input[type=radio]')
+                     
+            var aRare = '';
+            var aSometimes = '';
+            var aOften = '';
+            
+            var bRare = '';
+            var bSometimes = '';
+            var bOften = '';
+            
+            var cRare = '';
+            var cSometimes = '';
+            var cOften = '';
+            
+            var aggregate = '';
+            
+            jq.each(hungerRadioa, function(){
+                if (this.value == 159416 &amp;&amp; this.checked == true) {
+                    aRare = 1;
+                    aSometimes = 0;
+                    aOften = 0;
+                }
+                if (this.value == 1385 &amp;&amp; this.checked == true) {
+                    aRare = 0;
+                    aSometimes = 1;
+                    aOften = 0;
+                }
+                if (this.value == 1804 &amp;&amp; this.checked == true) {
+                    aRare = 0;
+                    aSometimes = 0;
+                    aOften = 2;
+                }
+            });
+            
+            jq.each(hungerRadiob, function(){
+                if (this.value == 159416 &amp;&amp; this.checked == true) {
+                    bRare = 1;
+                    bSometimes = 0;
+                    bOften = 0;
+                }
+                if (this.value == 1385 &amp;&amp; this.checked == true) {
+                    bRare = 0;
+                    bSometimes = 1;
+                    bOften = 0;
+                }
+                if (this.value == 1804 &amp;&amp; this.checked == true) {
+                    bRare = 0;
+                    bSometimes = 0;
+                    bOften = 2;
+                }
+            });
+            
+            jq.each(hungerRadioc, function(){
+                if (this.value == 159416 &amp;&amp; this.checked == true) {
+                    cRare = 1;
+                    cSometimes = 0;
+                    cOften = 0;
+                }
+                if (this.value == 1385 &amp;&amp; this.checked == true) {
+                    cRare = 0;
+                    cSometimes = 1;
+                    cOften = 0;
+                }
+                if (this.value == 1804 &amp;&amp; this.checked == true) {
+                    cRare = 0;
+                    cSometimes = 0;
+                    cOften = 2;
+                }
+            });
+            
+            aggregate = aRare + aSometimes + aOften + bRare + bSometimes + bOften + cRare + cSometimes + cOften;
+            
+            if (aggregate &gt; 0 &amp;&amp; aggregate &lt; 2) {
+                jq("#hhs-result-score input[value=1660]").prop("checked", true);
+                jq('#hhs-result-score input[type=radio]').attr("style", "pointer-events:none;");
+            }
+            if (aggregate &gt; 1 &amp;&amp; aggregate &lt; 4) {
+                jq("#hhs-result-score input[value=142177]").prop("checked", true);
+                jq('#hhs-result-score input[type=radio]').attr("style", "pointer-events:none;");
+            }
+            if (aggregate &gt; 3) {
+                jq("#hhs-result-score input[value=1662]").prop("checked", true);
+                jq('#hhs-result-score input[type=radio]').attr("style", "pointer-events:none;");
+            }
+            
         }
         
         function onWeightOrHeightChange() {
@@ -193,13 +337,25 @@
         jQuery(function () {
             getField('weight.value').change(onWeightOrHeightChange);
             getField('height.value').change(onWeightOrHeightChange);
+            
             getField('wc.value').change(onWaistOrHipChange);
             getField('hc.value').change(onWaistOrHipChange);
+            
             jq('#medical-history').change(onMedicalHistoryChange);
+            
             jq('#chronic-illness').change(onChronicIllnessChange);
+            
             jq('#hq-1').change(onHungerAssessmentaChange);
             jq('#hq-2').change(onHungerAssessmentbChange);
             jq('#hq-3').change(onHungerAssessmentcChange);
+            
+            jq('#hq-1').change(onHouseholdHungerChange);
+            jq('#hq-2').change(onHouseholdHungerChange);
+            jq('#hq-3').change(onHouseholdHungerChange);
+            
+            jq('#hq-1-a').change(onHouseholdHungerScore);
+            jq('#hq-2-a').change(onHouseholdHungerScore);
+            jq('#hq-3-a').change(onHouseholdHungerScore);
            
             onWeightOrHeightChange();
             displayRecentBmi();
@@ -210,6 +366,8 @@
             onHungerAssessmentaChange();
             onHungerAssessmentbChange();
             onHungerAssessmentcChange();
+            onHouseholdHungerChange();
+            onHouseholdHungerScore();
             
             jq("#tbl-medical-history").hide();
             jq('input[type=radio].medical-history').prop("checked", false);
@@ -305,35 +463,33 @@
                             <td><span id="recent-calculated-bmi" class="value"></span></td>
                         </tr>
                     </includeIf>
-                    <tr class="patient-details">
-                        <td>WC</td>
-                        <td>
-                            <obs conceptId="163080AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" id="wc"/>
-                        </td>
-                        <td>
-                            <span class="value">
-                                <recentObs conceptId="163080AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
-                            </span>
-                        </td>
-                    </tr>
-                    <tr class="patient-details">
-                        <td>HC</td>
-                        <td>
-                            <obs conceptId="163081AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" id="hc"/>
-                        </td>
-                        <td>
-                            <span class="value">
-                                <recentObs conceptId="163081AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
-                            </span>
-                        </td>
-                    </tr>
-                    <includeIf velocityTest="$patient.age &gt; 17">
+                        <tr class="patient-details">
+                            <td>WC</td>
+                            <td>
+                                <obs conceptId="163080AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" id="wc"/>
+                            </td>
+                            <td>
+                                <span class="value">
+                                    <recentObs conceptId="163080AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr class="patient-details">
+                            <td>HC</td>
+                            <td>
+                                <obs conceptId="163081AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" id="hc"/>
+                            </td>
+                            <td>
+                                <span class="value">
+                                    <recentObs conceptId="163081AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                                </span>
+                            </td>
+                        </tr>
                         <tr class="patient-details">
                             <td>Waist Hip Ratio</td>
                             <td><span id="calculated-whr" class="value"></span></td>
                             <td><span id="recent-calculated-whr" class="value"></span></td>
                         </tr>
-                    </includeIf>
                 </table>
                 <table cellspacing="5">
                     <tr>
@@ -411,14 +567,14 @@
                     <tr>
                         <td>Unplanned Weight Loss</td>
                         <td>
-                            <obs conceptId="159214AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" 
+                            <obs conceptId="1858AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" 
                                  answerConceptIds="5332AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,5339AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" 
                                  style="dropdown" answerLabels="weight loss &lt;= 10%,weight loss &gt; 10%"
                             />
                         </td>
                         <td>
                             <span class="value">
-                                <recentObs conceptId="159214AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                                <recentObs conceptId="1858AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
                             </span>
                         </td>
                     </tr>
@@ -479,8 +635,9 @@
                     <tr id="hq-1-a">
                         <td>1.a) How often does this happen?</td>
                         <td>
-                            <input type="radio" name="question-1-a" class="question-1-a" value="1065"/> Yes
-                            <input type="radio" name="question-1-a" class="question-1-a" value="1066"/> No
+                            <input type="radio" name="question-1-a" class="question-1-a" value="159416"/> Rarely
+                            <input type="radio" name="question-1-a" class="question-1-a" value="1385"/> Sometimes
+                            <input type="radio" name="question-1-a" class="question-1-a" value="1804"/> Often
                         </td>
                     </tr>
                     <tr></tr>
@@ -495,8 +652,9 @@
                     <tr id="hq-2-a">
                         <td>2.a) How often does this happen?</td>
                         <td>
-                            <input type="radio" name="question-2-a" class="question-2-a" value="1065"/> Yes
-                            <input type="radio" name="question-2-a" class="question-2-a" value="1066"/> No
+                            <input type="radio" name="question-2-a" class="question-2-a" value="159416"/> Rarely
+                            <input type="radio" name="question-2-a" class="question-2-a" value="1385"/> Sometimes
+                            <input type="radio" name="question-2-a" class="question-2-a" value="1804"/> Often
                         </td>
                     </tr>
                     <tr></tr>
@@ -511,8 +669,9 @@
                     <tr id="hq-3-a">
                         <td>3.a) How often does this happen?</td>
                         <td>
-                            <input type="radio" name="question-3-a" class="question-3-a" value="1065"/> Yes
-                            <input type="radio" name="question-3-a" class="question-3-a" value="1066"/> No
+                            <input type="radio" name="question-3-a" class="question-3-a" value="159416"/> Rarely
+                            <input type="radio" name="question-3-a" class="question-3-a" value="1385"/> Sometimes
+                            <input type="radio" name="question-3-a" class="question-3-a" value="1804"/> Often
                         </td>
                     </tr>
                 </table>
@@ -525,7 +684,7 @@
                     </tr>
                     <tr>
                         <td colspan="3">
-                            <obs id="tb-result-status" conceptId="1659AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" labelText="HHS Category:" answerConceptIds="1660AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,142177AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,1662AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" style="radio" answerLabels="Little to no household hunger,Moderate household hunger,Severe household hunger" />
+                            <obs id="hhs-result-score" conceptId="1659AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" labelText="HHS Category:" answerConceptIds="1660AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,142177AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,1662AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" style="radio" answerLabels="Little to no household hunger,Moderate household hunger,Severe household hunger" />
                         </td>
                    </tr>
                         <tr>
@@ -533,7 +692,7 @@
                         </tr>
                 </table>
             </fieldset>
-            <fieldset class="patient-details">
+<!--            <fieldset class="patient-details">
                 <legend>Dietary and Food Security</legend>
                 <table cellspacing="5" style=" float: left;">
                     <tr><th>Dietary assessment (not yet complete)</th></tr>
@@ -573,7 +732,7 @@
                         </td>
                     </tr>
                 </table>
-            </fieldset>
+            </fieldset>-->
             <fieldset class="patient-details">
                 <legend>Physical</legend>
                 <table style="display: inline-block;" cellspacing="15">
@@ -584,7 +743,7 @@
                     <tr class="patient-details">
                         <td>
                             <obs    
-                                id="nutritional-status"
+                                id="physical-activity"
                                 conceptId="159364AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
                                 answerConceptIds="1090AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,1407AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,1115AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,1408AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
                                 answerLabels="Never,Low,Medium,High"
@@ -676,14 +835,20 @@
                         <tr>
                             <td>Do you smoke?</td>
                             <td>
-                                <obs id="smoking" conceptId="163201AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"  style="yes_no"/>
+                                <obs id="smoking" conceptId="163201AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                                    answerConceptIds="1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                                    style="radio" answerLabels="Yes,No"
+                                />
                             </td>
                         </tr>
                         <br />
                         <tr>
                             <td>Do you take alcohol?</td>
                             <td>
-                                <obs id="alcohol" conceptId="159449AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"  style="yes_no"/>
+                                <obs id="alcohol" conceptId="159449AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                                    answerConceptIds="1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                                    style="radio" answerLabels="Yes,No"
+                                />
                             </td>
                         </tr>
                     </table>
@@ -722,11 +887,11 @@
                     <tr>
                         <td>ANC Visits</td>
                         <td>
-                            <obs conceptId="160446AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" id="anc-visit"/>
+                            <obs conceptId="1425AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" id="anc-visit"/>
                         </td>
                         <td>
                             <span class="value">
-                                <recentObs conceptId="160446AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                                <recentObs conceptId="1425AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
                             </span>
                         </td>
                     </tr>
