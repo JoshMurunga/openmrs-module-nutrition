@@ -178,7 +178,7 @@
             });
             
             if(assessmentNoResponsesa.length &gt; 0 &amp;&amp; assessmentNoResponsesb.length &gt; 0 &amp;&amp; assessmentNoResponsesc.length &gt; 0) {
-                jq("#hhs-result-score input[value=1660]").prop("checked", true);
+                jq("#hhs-result-score input[value=1498]").prop("checked", true);
                 jq('#hhs-result-score input[type=radio]').attr("style", "pointer-events:none;");
             }
         }
@@ -259,21 +259,23 @@
             aggregate = aRare + aSometimes + aOften + bRare + bSometimes + bOften + cRare + cSometimes + cOften;
             
             if (aggregate &gt; 0 &amp;&amp; aggregate &lt; 2) {
-                jq("#hhs-result-score input[value=1660]").prop("checked", true);
+                jq("#hhs-result-score input[value=1498]").prop("checked", true);
                 jq('#hhs-result-score input[type=radio]').attr("style", "pointer-events:none;");
             }
             if (aggregate &gt; 1 &amp;&amp; aggregate &lt; 4) {
-                jq("#hhs-result-score input[value=142177]").prop("checked", true);
+                jq("#hhs-result-score input[value=1499]").prop("checked", true);
                 jq('#hhs-result-score input[type=radio]').attr("style", "pointer-events:none;");
             }
             if (aggregate &gt; 3) {
-                jq("#hhs-result-score input[value=1662]").prop("checked", true);
+                jq("#hhs-result-score input[value=1500]").prop("checked", true);
                 jq('#hhs-result-score input[type=radio]').attr("style", "pointer-events:none;");
             }
             
         }
         
         function onWeightOrHeightChange() {
+            var pgender = "<lookup expression="patient.gender" />";
+            var page = "<lookup expression="patient.age" />";
             var display = '';
             var weightKg = parseFloat(getValue('weight.value'));
             var heightM = parseFloat(getValue('height.value')) / 100;
@@ -296,6 +298,12 @@
                 jq("#nutritional-status input[value=1115]").prop("checked", true);
             } else if (bmi &gt; 25) {
                 jq("#nutritional-status input[value=114413]").prop("checked", true);
+            }
+            
+            if(pgender == 'F' &amp;&amp; page &gt; 0.5 &amp;&amp; page &lt; 6){
+                if(heightM &gt; 44 &amp;&amp; heightM &lt; 81 &amp;&amp; weightKg &gt; 2.4 &amp;&amp; weightKg &lt; 10.2){
+                    jq("#nutritional-status input[value=163302]").prop("checked", true);
+                }
             }
         }
         
@@ -324,7 +332,7 @@
         
         function displayRecentWhr() {
             var waistCm = "<lookup expression="fn.latestObs(163080).valueNumeric"/>"
-            var hipCm = ("<lookup expression="fn.latestObs(163081).valueNumeric"/>")/100
+            var hipCm = "<lookup expression="fn.latestObs(163081).valueNumeric"/>"
             var whr='';
             var recent_whr ='';
             if (!isNaN(waistCm) &amp;&amp; !isNaN(hipCm)) {
@@ -377,13 +385,50 @@
             jq("#hq-1-a").hide();
             jq("#hq-2-a").hide();
             jq("#hq-3-a").hide();
+            jq("#recent-viral-load").hide();
+            jq("#recent-viral-load-ldl").hide();
             jq('#nutritional-status input[type=radio]').attr("style", "pointer-events:none;");
             
             var pgender = "<lookup expression="patient.gender" />";
             var ppregnant = "<lookup expression="fn.latestObs(5272).getValueCoded()" />";
+            var hhscore = "<lookup expression="fn.latestObs(138398).getValueCoded()" />";
+            var hhsDisplay = '';
+            
+            var viraldate = "<lookup expression="fn.latestObs(856).getObsDatetime()" />";
+            var ldldate = "<lookup expression="fn.latestObs(1305).getObsDatetime()" />";
+            
+            if (new Date(viraldate) &gt; new Date(ldldate)) {
+                jq("#recent-viral-load").show();
+                jq("#recent-viral-load-ldl").hide();
+            }
+            if (new Date(ldldate) &gt; new Date(viraldate)) {
+                jq("#recent-viral-load").hide();
+                jq("#recent-viral-load-ldl").show();
+            }
+            if (ldldate == false) {
+                jq("#recent-viral-load").show();
+                jq("#recent-viral-load-ldl").hide();
+            }
+            if (viraldate == false) {
+                jq("#recent-viral-load").hide();
+                jq("#recent-viral-load-ldl").show();
+            }
             
             if (pgender == 'F' &amp;&amp; ppregnant == 1065) {
                 jq("#pmtct").show();
+            }
+            
+            if (hhscore == 1498){
+                hhsDisplay = 'Little to no household hunger'
+                jq('#recent-hhs').html(hhsDisplay);
+            }
+            if (hhscore == 1499){
+                hhsDisplay = 'Moderate household hunger'
+                jq('#recent-hhs').html(hhsDisplay);
+            }
+            if (hhscore == 1500){
+                hhsDisplay = 'Severe household hunger'
+                jq('#recent-hhs').html(hhsDisplay);
             }
         });
     </script>
@@ -452,21 +497,27 @@
                     <includeIf velocityTest="$patient.age &lt; 5">
                         <tr class="patient-details">
                             <td>Z-Score</td>
-                            <td><span id="calculated-bmi" class="value"></span></td>
-                            <td><span id="recent-calculated-bmi" class="value"></span></td>
+                            <td>
+                                <obs conceptId="162584AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" id="z-score" />
+                            </td>
+                            <td>
+                                <span class="value">
+                                    <recentObs conceptId="162584AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                                </span>
+                            </td>
                         </tr>
                     </includeIf>
-                    <includeIf velocityTest="$patient.age &lt; 17 &amp;&amp; $patient.age &gt; 5">
+<!--                    <includeIf velocityTest="$patient.age &lt; 17 &amp;&amp; $patient.age &gt; 5">
                         <tr class="patient-details">
                             <td>BMI for Age</td>
                             <td><span id="calculated-bmi" class="value"></span></td>
                             <td><span id="recent-calculated-bmi" class="value"></span></td>
                         </tr>
-                    </includeIf>
+                    </includeIf>-->
                         <tr class="patient-details">
-                            <td>WC</td>
+                            <td>Waist Circumference</td>
                             <td>
-                                <obs conceptId="163080AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" id="wc"/>
+                                <obs conceptId="163080AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" id="wc"/>cm
                             </td>
                             <td>
                                 <span class="value">
@@ -475,9 +526,9 @@
                             </td>
                         </tr>
                         <tr class="patient-details">
-                            <td>HC</td>
+                            <td>Hip Circumference</td>
                             <td>
-                                <obs conceptId="163081AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" id="hc"/>
+                                <obs conceptId="163081AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" id="hc"/>cm
                             </td>
                             <td>
                                 <span class="value">
@@ -684,12 +735,16 @@
                     </tr>
                     <tr>
                         <td colspan="3">
-                            <obs id="hhs-result-score" conceptId="1659AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" labelText="HHS Category:" answerConceptIds="1660AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,142177AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,1662AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" style="radio" answerLabels="Little to no household hunger,Moderate household hunger,Severe household hunger" />
+                            <obs id="hhs-result-score" conceptId="138398AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" labelText="HHS Category:" answerConceptIds="1498AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,1499AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,1500AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" style="radio" answerLabels="Little to no household hunger,Moderate household hunger,Severe household hunger" />
                         </td>
-                   </tr>
-                        <tr>
-                            <td colspan="2"> <p></p></td>
-                        </tr>
+                    </tr>
+                    <tr>
+                        <td>Recent: </td>
+                        <td><span id="recent-hhs" class="value"></span></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"> <p></p></td>
+                    </tr>
                 </table>
             </fieldset>
 <!--            <fieldset class="patient-details">
@@ -865,11 +920,11 @@
                     <tr>
                         <td>Viral Load</td>
                         <td>
-                            <obs conceptId="163080AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" id="viral-load"/>
-                        </td>
-                        <td>
-                            <span class="value">
-                                <recentObs conceptId="163080AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                            <span class="value" id="recent-viral-load">
+                                <recentObs conceptId="856AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                            </span>
+                            <span class="value" id="recent-viral-load-ldl">
+                                <recentObs conceptId="1305AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
                             </span>
                         </td>
                     </tr>
