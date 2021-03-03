@@ -4,7 +4,7 @@
 
     <groupId>org.openmrs.module</groupId>
     <artifactId>nutrition</artifactId>
-    <version>1.0</version>
+    <version>1.1.0</version>
     <packaging>pom</packaging>
     <name>Nutrition</name>
     <description>Nutrition module and PHDP Reporting added to KenyaEMR</description>
