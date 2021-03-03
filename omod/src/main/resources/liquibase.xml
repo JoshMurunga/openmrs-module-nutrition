@@ -2,22 +2,11 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9"
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9 http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
-    <changeSet id="${project.parent.artifactId}-2021-03-01-15-42" author="JoshMurunga">
+    <changeSet id="${project.parent.artifactId}-20210303-1300" author="JoshMurunga">
         <comment>
-            Clear all sql scripts so that they are loaded afresh
+            Execute Query
         </comment>
-        <sql>
-            DELETE FROM liquibasechangelog where id like '%nutrition%';
-        </sql>
-    </changeSet>
-
-    <changeSet id="${project.parent.artifactId}-2021-03-01-15-46" author="JoshMurunga">
-        <comment>
-            Update Nutrition concepts
-        </comment>
-        <sql>
-            UPDATE openmrs.concept SET datatype_id = 2 WHERE concept_id IN (138398,159364,1633,161628);
-        </sql>
+        <sqlFile path="sql/Query.sql" />
     </changeSet>
 </databaseChangeLog>
 
