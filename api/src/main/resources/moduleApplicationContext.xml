@@ -86,7 +86,7 @@
         <property name="commonReports">
             <set>
                 <ref bean="kenyaemr.etl.common.report.patientPHDP"/>
-                <!--<ref bean="kenyaemr.etl.common.report.nutNCDCaCx"/>-->
+                <ref bean="kenyaemr.etl.common.report.ncds"/>
             </set>
         </property>
     </bean>
@@ -102,14 +102,15 @@
         </property>
     </bean>
     
-<!--    <bean id="kenyaemr.etl.common.report.nutNCDCaCx" class="org.openmrs.module.kenyacore.report.IndicatorReportDescriptor">
-        <property name="targetUuid" value="598dce12-6714-4ba3-8f70-6050ae45e09e" />
-	<property name="name" value="Nutrition, NCDs and CaCx" />
-	<property name="description" value="A report for Nutrition Status, NCD and CaCx" />
+    <bean id="kenyaemr.etl.common.report.ncds" class="org.openmrs.module.kenyacore.report.IndicatorReportDescriptor">
+        <property name="targetUuid" value="6ec54853-7cd4-11eb-96d3-5254004d77d3" />
+	<property name="name" value="Non Communicable Diseases" />
+	<property name="description" value="A report for NCDs screening" />
 	<property name="apps">
             <set>
                 <ref bean="kenyaemr.app.reports" />
             </set>
         </property>
-    </bean>-->
+        <property name="template" value="nutrition:Non_Communicable_Diseases.xls" />
+    </bean>
 </beans>
