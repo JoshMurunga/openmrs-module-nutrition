@@ -5,20 +5,28 @@
 
     <!-- Apps -->
 
-<!--    <bean id="keaddonexample.app.example" factory-bean="kenyacore.appFactoryBean" factory-method="createInstance">
+    <!--    <bean id="keaddonexample.app.example" factory-bean="kenyacore.appFactoryBean" factory-method="createInstance">
         <constructor-arg value="keaddonexample.example" />
         <constructor-arg value="Example" />
         <constructor-arg value="keaddonexample/example/home.page" />
         <constructor-arg value="keaddonexample:apps/example.png" />
         <constructor-arg value="700" />
     </bean>-->
+    
+    <bean id="nutrition.app.nutrition" factory-bean="kenyacore.appFactoryBean" factory-method="createInstance">
+        <constructor-arg value="nutrition.nutrition" />
+        <constructor-arg value="Nutrition" />
+        <constructor-arg value="nutrition/nutrition/nutritionHome.page" />
+        <constructor-arg value="nutrition:apps/nutrition.png" />
+        <constructor-arg value="301" />
+    </bean>
 
     <!-- Forms config -->
     <bean id="keaddonexample.config.form" class="org.openmrs.module.kenyacore.form.FormConfiguration">
         <property name="commonVisitForms">
             <set>
                 <ref bean="nutrition.form.nutritionassessment" />
-<!--                <ref bean="keaddonexample.form.socialworkadultscreening" />
+                <!--                <ref bean="keaddonexample.form.socialworkadultscreening" />
                 <ref bean="keaddonexample.form.vmmcClientInitialForm" />
                 <ref bean="keaddonexample.form.vmmcClientFollowupForm" />-->
 
@@ -34,6 +42,7 @@
             <set>
                 <ref bean="kenyaemr.app.clinician" />
                 <ref bean="kenyaemr.app.chart" />
+                <ref bean="nutrition.app.nutrition" />
             </set>
         </property>
         <property name="icon" value="kenyaui:forms/generic.png" />
@@ -41,7 +50,7 @@
     </bean>
 
     <!-- Social work -->
-<!--    <bean id="keaddonexample.form.socialworkadultscreening" class="org.openmrs.module.kenyacore.form.FormDescriptor">
+    <!--    <bean id="keaddonexample.form.socialworkadultscreening" class="org.openmrs.module.kenyacore.form.FormDescriptor">
         <property name="targetUuid" value="0640058c-aa3f-47d0-867b-3025f2e5f80d" />
         <property name="apps">
             <set>
@@ -55,7 +64,7 @@
     </bean>-->
 
     <!-- VMMC Initial -->
-<!--    <bean id="keaddonexample.form.vmmcClientInitialForm" class="org.openmrs.module.kenyacore.form.FormDescriptor">
+    <!--    <bean id="keaddonexample.form.vmmcClientInitialForm" class="org.openmrs.module.kenyacore.form.FormDescriptor">
         <property name="targetUuid" value="5f91bcbf-edd2-4580-9b9a-85fbfa37ac4e" />
         <property name="apps">
             <set>
@@ -68,7 +77,7 @@
     </bean>-->
 
     <!-- VMMC Followup -->
-<!--    <bean id="keaddonexample.form.vmmcClientFollowupForm" class="org.openmrs.module.kenyacore.form.FormDescriptor">
+    <!--    <bean id="keaddonexample.form.vmmcClientFollowupForm" class="org.openmrs.module.kenyacore.form.FormDescriptor">
         <property name="targetUuid" value="434d97d1-13c7-4e2f-bae8-ca57eb42f6a0" />
         <property name="apps">
             <set>
@@ -104,9 +113,9 @@
     
     <bean id="kenyaemr.etl.common.report.ncds" class="org.openmrs.module.kenyacore.report.IndicatorReportDescriptor">
         <property name="targetUuid" value="6ec54853-7cd4-11eb-96d3-5254004d77d3" />
-	<property name="name" value="Non Communicable Diseases" />
-	<property name="description" value="A report for NCDs screening" />
-	<property name="apps">
+        <property name="name" value="Non Communicable Diseases" />
+        <property name="description" value="A report for NCDs screening" />
+        <property name="apps">
             <set>
                 <ref bean="kenyaemr.app.reports" />
             </set>
